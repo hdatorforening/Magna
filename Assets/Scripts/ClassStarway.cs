@@ -3,9 +3,9 @@ using System.Collections;
 
 namespace Galaxy {
 	public class Starway : MonoBehaviour {
-		LineRenderer starway; // = new GameObject().AddComponent<LineRenderer> ();
-		Vector3 startPoint;
-		Vector3 endPoint;
+		public LineRenderer starway; // = new GameObject().AddComponent<LineRenderer> ();
+		public Vector3 startPoint;
+		public Vector3 endPoint;
 
 		public Starway (LineRenderer line, Vector3 start, Vector3 end){
 			starway = line;
