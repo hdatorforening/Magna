@@ -91,8 +91,8 @@ public class WorldGenScript : MonoBehaviour {
 	}
 
 	void ClearExessLines(){
-		foreach (GameObject line1 in starwayList) {
-			foreach (GameObject line2 in starList) {
+		foreach (Starway line1 in starwayList) {
+			foreach (Starway line2 in starwayList) {
 				if (line1 != line2) {
 					
 				}
