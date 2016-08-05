@@ -6,16 +6,21 @@ using System.Collections.Generic;
 using Galaxy;
 
 public class WorldGenScript : MonoBehaviour {
+	//Debugstuff
+	bool speltestStars;
+	bool speltestStarway;
+	public GameObject intdebugstar;
+	public Material testmaterial;
 
-	bool speltest;
-
+	//Proper stuff
+	public float worldSize;
 
 	public GameObject starPrefab;
-	public GameObject starwayPrefab;
 	public Material lineMaterial;
 
 	public List<Object> starList = new List<Object>(); //List of all existing stars
 	public List<Starway> starwayList = new List<Starway>(); //List of all existing starways
+	List<Starway> StarwayCollision = new List<Starway>(); //List of collisions with active starway
 
 	Quaternion quat;
 
@@ -25,11 +30,13 @@ public class WorldGenScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		speltest = true;
-		if (speltest) {
+		speltestStars = false;
+		speltestStarway = false;
+		if (speltestStars || speltestStarway) {
 			Debug.Log ("Debugging mode");
 		}
-		int numberOfStars = 5;
+		int numberOfStars = 50;
+		worldSize = 10f;
 
 		GenerateStars (numberOfStars);
 		GenerateStarWays ();
@@ -46,19 +53,22 @@ public class WorldGenScript : MonoBehaviour {
 		float y;
 		float z;
 
-		if (!speltest) {
+		if (!speltestStars) {
 			for (int i = 0; i < n; i++) {
-				x = Random.Range (-5.0f, 5.0f);
-				y = Random.Range (-5.0f, 5.0f);
+				x = Random.Range (-worldSize, worldSize);
+				y = Random.Range (-worldSize, worldSize);
 				z = 0;
 				starList.Add (Instantiate (starPrefab, new Vector3 (x, y, z), quat));
 			}
 		} else {
 			starList.Add (Instantiate (starPrefab, new Vector3 (-2, -2, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (-2, 2, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (2, -2, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (2, 2, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (3, 0, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (-4, 5, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (3, -3, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (1, 3, 0), quat));
+			/*starList.Add (Instantiate (starPrefab, new Vector3 (3, 0, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (1, 0, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (-1, 1, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (0, 0.5f, 0), quat));*/
 		}
 
 		//Vector2.Distance();
@@ -82,16 +92,30 @@ public class WorldGenScript : MonoBehaviour {
 
 					if (!CheckStarwayCollision (lineStart, lineEnd)) {
 						SetupLine (lineStart, lineEnd);
+					} else {
+						
 					}
 				}
 			}
+		}
+
+		foreach (Starway line in starwayList) {
+			DrawLine (line.startPoint, line.endPoint);
 		}
 	}
 
 	void SetupLine(Vector3 start, Vector3 end)
 	{
-		var newLine = new GameObject().AddComponent<LineRenderer> ();
+		Starway newStarway = gameObject.AddComponent<Starway>();
+		newStarway.startPoint = start;
+		newStarway.endPoint = end;
 
+		starwayList.Add (newStarway);
+	}
+
+	void DrawLine (Vector3 start, Vector3 end)
+	{
+		var newLine = new GameObject().AddComponent<LineRenderer> ();
 
 		newLine.sortingLayerName = "OnTop";
 		newLine.sortingOrder = 5;
@@ -101,21 +125,10 @@ public class WorldGenScript : MonoBehaviour {
 		newLine.SetWidth(0.03f, 0.03f);
 		newLine.useWorldSpace = true;
 		newLine.material = lineMaterial;
-
-		//Starway newStarway = new Starway (newLine, start, end);
-
-		Starway newStarway = gameObject.AddComponent<Starway>();
-		newStarway.startPoint = start;
-		newStarway.endPoint = end;
-		newStarway.starway = newLine;
-
-		starwayList.Add (newStarway);
 	}
 
 	bool CheckStarwayCollision(Vector3 start, Vector3 end){
 		Vector3 ps1, pe1, ps2, pe2;
-
-		Rect rect = new Rect (0, 0, 0, 0);
 
 		float A1;
 		float B1;
@@ -152,7 +165,7 @@ public class WorldGenScript : MonoBehaviour {
 			C2 = A2*ps2.x+B2*ps2.y;
 
 			//Debug.Log(A1 +" "+ B1 +" "+ C1 +" | "+ A2 +" "+ B2 +" "+ C2);
-			Debug.Log ("1:Start:"+start+" End:"+end);
+			//Debug.Log ("1:Start:"+start+" End:"+end);
 
 			// Get delta and check if the lines are parallel
 			float delta = A1*B2 - A2*B1;
@@ -163,30 +176,27 @@ public class WorldGenScript : MonoBehaviour {
 				intersection.y = (A1 * C2 - A2 * C1) / delta;
 				intersection.z = 0;
 
+
 				if ( !(intersection == start || intersection == end) ) {
 					//Debug.Log (s2d +" : "+ intersection +" : "+ e2d);
 
-					rect.xMin = ps1.x;
-					rect.yMin = ps1.y;
-					rect.xMax = pe1.x;
-					rect.yMax = pe1.y;
 
-					Debug.Log ("2:Rect:"+rect +" Iners:"+ intersection);
+					//Debug.Log ("2:Rect:"+rect +" Iners:"+ intersection);
 
-					if (rect.Contains (intersection, true)) {
+					if (speltestStarway){
+						Instantiate (intdebugstar, intersection, quat);
+					}
 
-						Debug.Log ("Yay!");
-
-						rect.xMin = ps2.x;
-						rect.yMin = ps2.y;
-						rect.xMax = pe2.x;
-						rect.yMax = pe2.y;
-
-						//Debug.Log (rect);
-
-						if (rect.Contains (intersection)) {
-							Debug.Log ("Starway denied!");
+					if (notRect (ps1, pe1, intersection)) {
+						//Debug.Log ("Rect1");
+						if (notRect (ps2, pe2, intersection)) {
+							//Debug.Log ("Rect2");
 							return true;
+							/*if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
+								starwayList.Remove (line2);
+							} else {
+								return true;
+							}*/
 						}
 					}
 				}
@@ -219,5 +229,56 @@ public class WorldGenScript : MonoBehaviour {
 			(B2*C1 - B1*C2)/delta,
 			(A1*C2 - A2*C1)/delta
 		);
+	}
+
+	bool notRect(Vector3 p1, Vector3 p2, Vector3 intersect){
+		bool sect = false;
+
+		float rectOffset = 0;
+
+		/* Debug to show rect on screen.
+		var newLine = new GameObject().AddComponent<LineRenderer> ();
+
+		Debug.Log ("notRect| p1: " + p1 + "P2: " + p2 + "intersect: " + intersect);
+
+		newLine.sortingLayerName = "OnTop";
+		newLine.sortingOrder = 5;
+		newLine.SetVertexCount(4);
+		newLine.SetPosition(0, p1);
+		newLine.SetPosition(1, new Vector3(p2.x, p1.y, 0));
+		newLine.SetPosition(2, p2);
+		newLine.SetPosition(3, new Vector3(p1.x, p2.y, 0));
+		newLine.SetWidth(0.03f, 0.03f);
+		newLine.useWorldSpace = true;
+		*/
+
+		if(p1.x < p2.x){
+			if (((p1.x + rectOffset) < intersect.x) && (intersect.x < (p2.x - rectOffset))){
+				sect = true;
+				//Debug.Log ("NotRect.x.if");
+			}
+		}else{
+			if (((p2.x + rectOffset) < intersect.x) && (intersect.x < (p1.x - rectOffset))){
+				sect = true;
+				//Debug.Log ("NotRect.x.else");
+			}
+		}
+
+		if (sect) {
+			if (p1.y < p2.y) {
+				if (((p1.y + rectOffset) < intersect.y) && (intersect.y < (p2.y - rectOffset))) {
+					//Debug.Log ("NotRect.y.if");
+					return true;
+				}
+			} else {
+				if (((p2.y + rectOffset) < intersect.y) && (intersect.y < (p1.y - rectOffset))) {
+					//Debug.Log ("NotRect.y.else");
+					return true;
+				}
+			}
+		}
+		//Debug.Log ("NotRect.False");
+		return false;
+
 	}
 }
