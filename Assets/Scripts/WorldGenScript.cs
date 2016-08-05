@@ -20,7 +20,7 @@ public class WorldGenScript : MonoBehaviour {
 
 	public List<Object> starList = new List<Object>(); //List of all existing stars
 	public List<Starway> starwayList = new List<Starway>(); //List of all existing starways
-	List<Starway> StarwayCollision = new List<Starway>(); //List of collisions with active starway
+	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
 
 	Quaternion quat;
 
@@ -36,10 +36,12 @@ public class WorldGenScript : MonoBehaviour {
 			Debug.Log ("Debugging mode");
 		}
 		int numberOfStars = 50;
+		int starwayLenght = 4;
 		worldSize = 10f;
+		Camera.main.orthographicSize = worldSize;
 
 		GenerateStars (numberOfStars);
-		GenerateStarWays ();
+		GenerateStarWays (starwayLenght);
 
 	}
 	
@@ -65,17 +67,17 @@ public class WorldGenScript : MonoBehaviour {
 			starList.Add (Instantiate (starPrefab, new Vector3 (-4, 5, 0), quat));
 			starList.Add (Instantiate (starPrefab, new Vector3 (3, -3, 0), quat));
 			starList.Add (Instantiate (starPrefab, new Vector3 (1, 3, 0), quat));
-			/*starList.Add (Instantiate (starPrefab, new Vector3 (3, 0, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (1, 0, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (3, 0, 0), quat));
+			starList.Add (Instantiate (starPrefab, new Vector3 (3, 3, 0), quat));
 			starList.Add (Instantiate (starPrefab, new Vector3 (-1, 1, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (0, 0.5f, 0), quat));*/
+			starList.Add (Instantiate (starPrefab, new Vector3 (-3, 2, 0), quat));
 		}
 
 		//Vector2.Distance();
 		return;
 	}
 
-	void GenerateStarWays (){
+	void GenerateStarWays (int starwayLenght){
 		//LineRenderer [] newStarway = new LineRenderer[];
 		//LineRenderer newStarway = new LineRenderer;
 		bool alreadyGenerated;
@@ -86,7 +88,7 @@ public class WorldGenScript : MonoBehaviour {
 				star.GetComponent<StarScript> ().starwayGen = true;
 				alreadyGenerated = destination.GetComponent<StarScript>().starwayGen;
 
-				if ((star != destination) && !alreadyGenerated && (Vector2.Distance(star.transform.position, destination.transform.position)) < 10 ) {
+				if ((star != destination) && !alreadyGenerated && (Vector2.Distance(star.transform.position, destination.transform.position)) < starwayLenght ) {
 					lineStart = star.transform.position;
 					lineEnd = destination.transform.position;
 
@@ -98,6 +100,10 @@ public class WorldGenScript : MonoBehaviour {
 				}
 			}
 		}
+		StarwayCollision.Sort ();
+		StarwayCollision.Reverse ();
+		VogonConstructionFleet (1); //Ränsar ovälkomna starways.
+		StarwayCollision.Clear();
 
 		foreach (Starway line in starwayList) {
 			DrawLine (line.startPoint, line.endPoint);
@@ -129,6 +135,8 @@ public class WorldGenScript : MonoBehaviour {
 
 	bool CheckStarwayCollision(Vector3 start, Vector3 end){
 		Vector3 ps1, pe1, ps2, pe2;
+
+		int itemNumber = 0;
 
 		float A1;
 		float B1;
@@ -178,10 +186,7 @@ public class WorldGenScript : MonoBehaviour {
 
 
 				if ( !(intersection == start || intersection == end) ) {
-					//Debug.Log (s2d +" : "+ intersection +" : "+ e2d);
-
-
-					//Debug.Log ("2:Rect:"+rect +" Iners:"+ intersection);
+					//Debug.Log ("Intersection? \n P1 "+ps1+", "+pe1+" : P2 "+ps2+ ", "+pe2);
 
 					if (speltestStarway){
 						Instantiate (intdebugstar, intersection, quat);
@@ -191,22 +196,26 @@ public class WorldGenScript : MonoBehaviour {
 						//Debug.Log ("Rect1");
 						if (notRect (ps2, pe2, intersection)) {
 							//Debug.Log ("Rect2");
-							return true;
-							/*if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
-								starwayList.Remove (line2);
+							if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
+								//Debug.Log ("Shorter.");
+								if (!StarwayCollision.Contains (itemNumber)) {
+									StarwayCollision.Add (itemNumber);
+								}
 							} else {
+								//Debug.Log ("Stop");
 								return true;
-							}*/
+							}
 						}
 					}
 				}
 			}
+			itemNumber++;
 		}
 
 		return false;
 	}
 
-	Vector2 LineIntersectionPoint(Vector3 ps1, Vector3 pe1, Vector3 ps2, 
+	/*Vector2 LineIntersectionPoint(Vector3 ps1, Vector3 pe1, Vector3 ps2, 
 		Vector3 pe2)
 	{
 		// Get A,B,C of first line - points : ps1 to pe1
@@ -229,28 +238,12 @@ public class WorldGenScript : MonoBehaviour {
 			(B2*C1 - B1*C2)/delta,
 			(A1*C2 - A2*C1)/delta
 		);
-	}
+	}*/
 
 	bool notRect(Vector3 p1, Vector3 p2, Vector3 intersect){
 		bool sect = false;
 
 		float rectOffset = 0;
-
-		/* Debug to show rect on screen.
-		var newLine = new GameObject().AddComponent<LineRenderer> ();
-
-		Debug.Log ("notRect| p1: " + p1 + "P2: " + p2 + "intersect: " + intersect);
-
-		newLine.sortingLayerName = "OnTop";
-		newLine.sortingOrder = 5;
-		newLine.SetVertexCount(4);
-		newLine.SetPosition(0, p1);
-		newLine.SetPosition(1, new Vector3(p2.x, p1.y, 0));
-		newLine.SetPosition(2, p2);
-		newLine.SetPosition(3, new Vector3(p1.x, p2.y, 0));
-		newLine.SetWidth(0.03f, 0.03f);
-		newLine.useWorldSpace = true;
-		*/
 
 		if(p1.x < p2.x){
 			if (((p1.x + rectOffset) < intersect.x) && (intersect.x < (p2.x - rectOffset))){
@@ -280,5 +273,21 @@ public class WorldGenScript : MonoBehaviour {
 		//Debug.Log ("NotRect.False");
 		return false;
 
+	}
+
+	void VogonConstructionFleet(int operation){
+		if (operation == 1) { //Rensar lägre stående starways.
+			foreach (int index in StarwayCollision) {
+				starwayList.RemoveAt (index);
+			}
+		} /*else if (operation == 2) { //Skjuter vilt med dekonstuktionslaser.
+			int i;
+			int u;
+			for (i = 0; i++; i < starwayList.Count() ) {
+				if (u = Random.value (0, 10) == 0) {
+					Random.value (0, starwayList.Count () - 1);
+				}
+			}
+		}*/
 	}
 }
