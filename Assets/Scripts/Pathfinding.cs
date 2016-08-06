@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using Galaxy;
 
-namespace pathfinding{
+namespace Pathfinding{
 	public class Pathfinding : MonoBehaviour {
 
 		List<Vector3> pathOpen = new List<Vector3>();

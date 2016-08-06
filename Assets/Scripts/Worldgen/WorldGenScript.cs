@@ -12,12 +12,16 @@ public class WorldGenScript : MonoBehaviour {
 	public GameObject intdebugstar;
 	public Material testmaterial;
 
+	//Imports
+	public StarPlacementScript scriptStarPlace;
+
 	//Proper stuff
 	public float worldSize;
 
 	public GameObject starPrefab;
 	public Material lineMaterial;
 
+	//Public lists
 	public List<Object> starList = new List<Object>(); //List of all existing stars
 	public List<Starway> starwayList = new List<Starway>(); //List of all existing starways
 	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
@@ -35,7 +39,7 @@ public class WorldGenScript : MonoBehaviour {
 		if (speltestStars || speltestStarway) {
 			Debug.Log ("Debugging mode");
 		}
-		int numberOfStars = 50;
+		int numberOfStars = 100;
 		int starwayLenght = 4;
 		worldSize = 10f;
 		Camera.main.orthographicSize = worldSize;
@@ -51,17 +55,21 @@ public class WorldGenScript : MonoBehaviour {
 	}
 
 	void GenerateStars (int n){
-		float x;
+		/*float x;
 		float y;
-		float z;
+		float z;*/
 
 		if (!speltestStars) {
-			for (int i = 0; i < n; i++) {
+			//scriptStarPlace = scriptStarPlace.GetComponent<StarPlacementScript> ().GenerateStarCluster(n);
+			//scriptStarPlace.GenerateStarCluster (n /*, new Vector3(0, 0, 0)*/);
+			GenerateStarCluster(n);
+			/*for (int i = 0; i < n; i++) {
 				x = Random.Range (-worldSize, worldSize);
 				y = Random.Range (-worldSize, worldSize);
 				z = 0;
 				starList.Add (Instantiate (starPrefab, new Vector3 (x, y, z), quat));
-			}
+
+			}*/
 		} else {
 			starList.Add (Instantiate (starPrefab, new Vector3 (-2, -2, 0), quat));
 			starList.Add (Instantiate (starPrefab, new Vector3 (-4, 5, 0), quat));
@@ -128,7 +136,7 @@ public class WorldGenScript : MonoBehaviour {
 		newLine.SetVertexCount(2);
 		newLine.SetPosition(0, start);
 		newLine.SetPosition(1, end);
-		newLine.SetWidth(0.03f, 0.03f);
+		newLine.SetWidth(0.04f, 0.04f);
 		newLine.useWorldSpace = true;
 		newLine.material = lineMaterial;
 	}
@@ -282,4 +290,62 @@ public class WorldGenScript : MonoBehaviour {
 			}
 		}*/
 	}
+
+
+	//------------------------------------------------------------------------------------------------
+
+	Vector3[] starStream;
+	int starCurrent;
+
+	WorldGenScript worldGen;
+
+	public void GenerateStarCluster(int numberOfSystems, Vector3 startLoc = default (Vector3)){
+		starStream = new Vector3[numberOfSystems];
+
+		int starParent = 0;
+		starCurrent = 0;
+
+		starStream [0] = startLoc;
+		starCurrent++;
+
+		while (starCurrent < numberOfSystems) {
+			GenerateStarLocation (starParent);
+		}
+
+		foreach (Vector3 pos in starStream) {
+			GenerateStarPlacement (pos);
+		}
+
+	}
+	bool GenerateStarLocation(int parentID){
+		bool failed = false;
+
+		worldGen = GetComponent<WorldGenScript> ();
+		for (int i = 0; i < 5; i++) {
+			Vector3 pos = Random.insideUnitCircle * 8.0f;
+			if (Vector3.Distance (new Vector3 (0, 0, 0), pos) > 1) {
+				pos += starStream [parentID];
+
+				for (int n = 0; n < starCurrent; n++) {
+					if (Vector3.Distance (starStream[n], pos) <= 1) {
+						failed = true;
+						break;
+					}
+				}
+
+				if (!failed) {
+					starStream [starCurrent] = pos;
+					starCurrent++;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	void GenerateStarPlacement(Vector3 coords){
+		worldGen.starList.Add (Instantiate (worldGen.starPrefab, coords, Quaternion.identity));
+	}
+
+
 }
