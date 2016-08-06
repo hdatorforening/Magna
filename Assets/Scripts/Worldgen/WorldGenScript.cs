@@ -39,7 +39,7 @@ public class WorldGenScript : MonoBehaviour {
 		if (speltestStars || speltestStarway) {
 			Debug.Log ("Debugging mode");
 		}
-		int numberOfStars = 100;
+		int numberOfStars = 200;
 		int starwayLenght = 4;
 		worldSize = 10f;
 		Camera.main.orthographicSize = worldSize;
@@ -296,6 +296,8 @@ public class WorldGenScript : MonoBehaviour {
 
 	Vector3[] starStream;
 	int starCurrent;
+	float maxStarDistance;
+	float minStarDistance;
 
 	WorldGenScript worldGen;
 
@@ -309,7 +311,9 @@ public class WorldGenScript : MonoBehaviour {
 		starCurrent++;
 
 		while (starCurrent < numberOfSystems) {
-			GenerateStarLocation (starParent);
+			//int genPar = (int) ((starParent - 4) / 1.1f);
+			GenerateStarLocation ((int) ((starParent - 4) / 1.1f));
+			starParent++;
 		}
 
 		foreach (Vector3 pos in starStream) {
@@ -318,16 +322,23 @@ public class WorldGenScript : MonoBehaviour {
 
 	}
 	bool GenerateStarLocation(int parentID){
+
+		maxStarDistance = 8;
+		minStarDistance = 1;
+
+		if (parentID < 0) {
+			parentID = 0;
+		}
 		bool failed = false;
 
 		worldGen = GetComponent<WorldGenScript> ();
 		for (int i = 0; i < 5; i++) {
-			Vector3 pos = Random.insideUnitCircle * 8.0f;
-			if (Vector3.Distance (new Vector3 (0, 0, 0), pos) > 1) {
+			Vector3 pos = Random.insideUnitCircle * maxStarDistance;
+			if (Vector3.Distance (new Vector3 (0, 0, 0), pos) > minStarDistance) {
 				pos += starStream [parentID];
 
 				for (int n = 0; n < starCurrent; n++) {
-					if (Vector3.Distance (starStream[n], pos) <= 1) {
+					if (Vector3.Distance (starStream[n], pos) <= minStarDistance) {
 						failed = true;
 						break;
 					}
