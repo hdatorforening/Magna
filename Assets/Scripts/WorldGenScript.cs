@@ -138,19 +138,17 @@ public class WorldGenScript : MonoBehaviour {
 
 		int itemNumber = 0;
 
-		float A1;
-		float B1;
-		float C1;
+		float A1, B1, C1; //Line1 calculations
 
-		float A2;
-		float B2;
-		float C2;
+		float A2, B2, C2; //Line2 calculations
 
 		ps1 = start;
 		pe1 = end;
 
-		//Vector2 s2d = new Vector2 (start.x, start.y);
-		//Vector2 e2d = new Vector2 (end.x, end.y);
+		// Get A,B,C of first line - points : ps1 to pe1
+		A1 = pe1.y-ps1.y;
+		B1 = ps1.x-pe1.x;
+		C1 = A1*ps1.x+B1*ps1.y;
 
 		//Debug.Log ("\n New Line");
 
@@ -160,12 +158,6 @@ public class WorldGenScript : MonoBehaviour {
 			pe2 = line2.endPoint;
 
 			//Debug.Log (ps2 + " " + pe2);
-
-
-			// Get A,B,C of first line - points : ps1 to pe1
-			A1 = pe1.y-ps1.y;
-			B1 = ps1.x-pe1.x;
-			C1 = A1*ps1.x+B1*ps1.y;
 
 			// Get A,B,C of second line - points : ps2 to pe2
 			A2 = pe2.y-ps2.y;

@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000012629541740}
   - 212: {fileID: 212000014203549022}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: DebugStar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

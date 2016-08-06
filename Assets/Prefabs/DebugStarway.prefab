@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000011276301486}
   - 212: {fileID: 212000012800940948}
   m_Layer: 0
-  m_Name: Starway 1
+  m_Name: DebugStarway
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
