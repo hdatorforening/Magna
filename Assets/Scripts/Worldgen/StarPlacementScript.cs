@@ -1,80 +1,45 @@
 ﻿using UnityEngine;
-using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 
 using Galaxy;
 
 namespace Galaxy {
-	public class StarPlacementScript : MonoBehaviour  {
-
-		bool systemPlacementDebug;
+	public class StarPlacementScript : MonoBehaviour {
 
 		Vector3[] starStream;
 		int starCurrent;
-		float maxStarDistance;
-		float minStarDistance;
 
-		WorldGenScript worldGenScript;
+		WorldGenScript worldGen;
 
 		public void GenerateStarCluster(int numberOfSystems, Vector3 startLoc = default (Vector3)){
-
-			systemPlacementDebug = true;
-
-			if (systemPlacementDebug) { Debug.Log ("GenerateStarCluster"); }
-
 			starStream = new Vector3[numberOfSystems];
-			worldGenScript = GetComponent<WorldGenScript> ();
 
 			int starParent = 0;
 			starCurrent = 0;
-
-			int failedPlacementsLoop = 0;
 
 			starStream [0] = startLoc;
 			starCurrent++;
 
 			while (starCurrent < numberOfSystems) {
-				//if (systemPlacementDebug) { Debug.Log ("Number of Systems: " + numberOfSystems); }
-				//int genPar = (int) ((starParent - 4) / 1.1f);
-				if (starParent >= starCurrent){ 
-					starParent = starCurrent / 2; 
-					failedPlacementsLoop++;
-				}
-
-				GenerateStarLocation ((int) ((starParent - 4) / 1.1f));
-				starParent++;
+				GenerateStarLocation (starParent);
 			}
 
-			if (systemPlacementDebug) { Debug.Log ("GenerateStarPlacement"); }
 			foreach (Vector3 pos in starStream) {
 				GenerateStarPlacement (pos);
 			}
 
-			if (systemPlacementDebug) {
-				Debug.Log ("Failed Placements Loops: " + failedPlacementsLoop);
-			}
-
 		}
-
 		bool GenerateStarLocation(int parentID){
-
-			maxStarDistance = 7;
-			minStarDistance = 1;
-
-			if (parentID < 0) {
-				parentID = 0;
-			}
 			bool failed = false;
 
-			for (int i = 0; i < 10; i++) {
-				Vector3 pos = Random.insideUnitCircle * maxStarDistance;
-				if (Vector3.Distance (new Vector3 (0, 0, 0), pos) > minStarDistance) {
-					pos = pos + starStream [parentID];
-					//if (systemPlacementDebug) { Debug.Log (parentID); }
+			worldGen = GetComponent<WorldGenScript> ();
+			for (int i = 0; i < 5; i++) {
+				Vector3 pos = Random.insideUnitCircle * 8.0f;
+				if (Vector3.Distance (new Vector3 (0, 0, 0), pos) > 1) {
+					pos += starStream [parentID];
 
 					for (int n = 0; n < starCurrent; n++) {
-						if (Vector3.Distance (starStream[n], pos) <= minStarDistance) {
+						if (Vector3.Distance (starStream[n], pos) <= 1) {
 							failed = true;
 							break;
 						}
@@ -91,7 +56,7 @@ namespace Galaxy {
 		}
 
 		void GenerateStarPlacement(Vector3 coords){
-			worldGenScript.starList.Add (Instantiate (worldGenScript.starPrefab, coords, Quaternion.identity));
+			worldGen.starList.Add (Instantiate (worldGen.starPrefab, coords, Quaternion.identity));
 		}
 	}
 }

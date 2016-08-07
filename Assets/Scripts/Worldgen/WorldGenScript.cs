@@ -13,7 +13,7 @@ public class WorldGenScript : MonoBehaviour {
 	public Material testmaterial;
 
 	//Imports
-	public StarPlacementScript starPlacementScript;
+	public StarPlacementScript scriptStarPlace;
 
 	//Proper stuff
 	public float worldSize;
@@ -39,9 +39,6 @@ public class WorldGenScript : MonoBehaviour {
 		if (speltestStars || speltestStarway) {
 			Debug.Log ("Debugging mode");
 		}
-
-		//starPlacementScript = starPlacementScript.GetComponent<StarPlacementScript> ().GenerateStarCluster(n);
-
 		int numberOfStars = 200;
 		int starwayLenght = 4;
 		worldSize = 10f;
@@ -57,15 +54,15 @@ public class WorldGenScript : MonoBehaviour {
 		
 	}
 
-	void GenerateStars (int numberOfStars){
+	void GenerateStars (int n){
 		/*float x;
 		float y;
 		float z;*/
 
 		if (!speltestStars) {
+			//scriptStarPlace = scriptStarPlace.GetComponent<StarPlacementScript> ().GenerateStarCluster(n);
 			//scriptStarPlace.GenerateStarCluster (n /*, new Vector3(0, 0, 0)*/);
-			starPlacementScript = GetComponent<StarPlacementScript> ();
-			starPlacementScript.GenerateStarCluster(numberOfStars);
+			GenerateStarCluster(n);
 			/*for (int i = 0; i < n; i++) {
 				x = Random.Range (-worldSize, worldSize);
 				y = Random.Range (-worldSize, worldSize);
@@ -297,7 +294,7 @@ public class WorldGenScript : MonoBehaviour {
 
 	//------------------------------------------------------------------------------------------------
 
-	/*Vector3[] starStream;
+	Vector3[] starStream;
 	int starCurrent;
 	float maxStarDistance;
 	float minStarDistance;
@@ -324,7 +321,6 @@ public class WorldGenScript : MonoBehaviour {
 		}
 
 	}
-	
 	bool GenerateStarLocation(int parentID){
 
 		maxStarDistance = 8;
@@ -360,7 +356,7 @@ public class WorldGenScript : MonoBehaviour {
 
 	void GenerateStarPlacement(Vector3 coords){
 		worldGen.starList.Add (Instantiate (worldGen.starPrefab, coords, Quaternion.identity));
-	}*/
+	}
 
 
 }
