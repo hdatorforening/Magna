@@ -99,6 +99,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 610146965}
   - 114: {fileID: 610146966}
+  - 114: {fileID: 610146967}
   m_Layer: 0
   m_Name: Generate Universe
   m_TagString: Untagged
@@ -130,12 +131,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18bb62643e52ec64382cc0f630145ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  intdebugstar: {fileID: 0}
+  testmaterial: {fileID: 0}
+  starPlacementScript: {fileID: 0}
+  worldSize: 0
   starPrefab: {fileID: 1000014140992114, guid: 6fb787758605f7f47b190c600af890e5, type: 2}
-  starwayPrefab: {fileID: 1000013517047410, guid: f3866b4ba8ed8ed49a61e5bbb3652049,
-    type: 2}
   lineMaterial: {fileID: 2100000, guid: d14400349d7d64d4ca0a42b498051f96, type: 2}
   starList: []
   starwayList: []
+  StarwayCollision: 
+--- !u!114 &610146967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 610146964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b25e2f47d17b0444b13895f7aa6c06e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1683851316
 GameObject:
   m_ObjectHideFlags: 0
