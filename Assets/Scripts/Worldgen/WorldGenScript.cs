@@ -3,14 +3,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Galaxy;
 
 public class WorldGenScript : MonoBehaviour {
-	//Debugstuff
-	bool speltestStars;
-	bool speltestStarway;
-	public GameObject intdebugstar;
-	public Material testmaterial;
 
 	//Imports
 	public StarPlacementScript starPlacementScript;
@@ -34,13 +28,6 @@ public class WorldGenScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		speltestStars = false;
-		speltestStarway = false;
-		if (speltestStars || speltestStarway) {
-			Debug.Log ("Debugging mode");
-		}
-
-		//starPlacementScript = starPlacementScript.GetComponent<StarPlacementScript> ().GenerateStarCluster(n);
 
 		int numberOfStars = 200;
 		int starwayLenght = 4;
@@ -58,34 +45,10 @@ public class WorldGenScript : MonoBehaviour {
 	}
 
 	void GenerateStars (int numberOfStars){
-		/*float x;
-		float y;
-		float z;*/
 
-		if (!speltestStars) {
-			//scriptStarPlace.GenerateStarCluster (n /*, new Vector3(0, 0, 0)*/);
-			starPlacementScript = GetComponent<StarPlacementScript> ();
-			starPlacementScript.GenerateStarCluster(numberOfStars);
-			/*for (int i = 0; i < n; i++) {
-				x = Random.Range (-worldSize, worldSize);
-				y = Random.Range (-worldSize, worldSize);
-				z = 0;
-				starList.Add (Instantiate (starPrefab, new Vector3 (x, y, z), quat));
+		starPlacementScript = GetComponent<StarPlacementScript> ();
+		starPlacementScript.GenerateStarCluster(numberOfStars);
 
-			}*/
-		} else {
-			starList.Add (Instantiate (starPrefab, new Vector3 (-2, -2, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (-4, 5, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (3, -3, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (1, 3, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (3, 0, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (3, 3, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (-1, 1, 0), quat));
-			starList.Add (Instantiate (starPrefab, new Vector3 (-3, 2, 0), quat));
-		}
-
-		//Vector2.Distance();
-		return;
 	}
 
 	void GenerateStarWays (int starwayLenght){
@@ -104,7 +67,7 @@ public class WorldGenScript : MonoBehaviour {
 					lineEnd = destination.transform.position;
 
 					if (!CheckStarwayCollision (lineStart, lineEnd)) {
-						SetupLine (lineStart, lineEnd);
+						//SetupLine (lineStart, lineEnd);
 					} else {
 						
 					}
@@ -121,14 +84,14 @@ public class WorldGenScript : MonoBehaviour {
 		}
 	}
 
-	void SetupLine(Vector3 start, Vector3 end)
+	/*void SetupLine(Vector3 start, Vector3 end)
 	{
 		Starway newStarway = gameObject.AddComponent<Starway>();
 		newStarway.startPoint = start;
 		newStarway.endPoint = end;
 
 		starwayList.Add (newStarway);
-	}
+	}*/
 
 	void DrawLine (Vector3 start, Vector3 end)
 	{
@@ -190,10 +153,6 @@ public class WorldGenScript : MonoBehaviour {
 
 				if ( !(intersection == start || intersection == end) ) {
 					//Debug.Log ("Intersection? \n P1 "+ps1+", "+pe1+" : P2 "+ps2+ ", "+pe2);
-
-					if (speltestStarway){
-						Instantiate (intdebugstar, intersection, quat);
-					}
 
 					if (notRect (ps1, pe1, intersection)) {
 						//Debug.Log ("Rect1");
