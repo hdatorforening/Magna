@@ -10,6 +10,7 @@ public class Star {
 	public List<Star> connectedStars = new List<Star>(); //Alla stjärnor som denna stjärna har anslutning till.
 
 	Galaxy galaxy;
+
 	int starID;
 
 	public int id {

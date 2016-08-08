@@ -16,11 +16,13 @@ public class GameController : MonoBehaviour {
 
 		galaxy = new Galaxy (gameSettings.numberOfStars);
 
+		Debug.Log (galaxy.starList.Count);
+
 		foreach (Star star in galaxy.starList) {
 			GameObject star_go = new GameObject ();
 			star_go.name = "Star_" +star.id;
 			star_go.transform.position = star.position;
-			star_go.transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
+			star_go.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 
 			SpriteRenderer star_sr = star_go.AddComponent<SpriteRenderer> ();
 			star_sr.sprite = starSprite;

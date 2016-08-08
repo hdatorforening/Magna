@@ -87,7 +87,7 @@ public class StarPlacementScript {
 				if (!failed) {
 					starStream [starCurrent] = pos;
 					AddStarToList (pos, starCurrent);
-					Debug.Log (starCurrent);
+					//Debug.Log (starCurrent);
 					starCurrent++;
 					return true;
 				}

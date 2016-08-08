@@ -4,9 +4,10 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StarwayGen : MonoBehaviour {
+public class StarwayGen {
 
 	Galaxy galaxy;
+	Starway starway;
 
 	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
 
@@ -30,20 +31,22 @@ public class StarwayGen : MonoBehaviour {
 					lineEnd = destination.position;
 
 					if (!CheckStarwayCollision (lineStart, lineEnd)) {
-						//SetupLine (lineStart, lineEnd);
+						galaxy.starwayList.Add (starway = new Starway (lineStart, lineEnd));
 					} else {
 
 					}
 				}
 			}
 		}
+
 		StarwayCollision.Sort ();
 		StarwayCollision.Reverse ();
 		VogonConstructionFleet (1); //Ränsar ovälkomna starways.
 		StarwayCollision.Clear();
 
 		foreach (Starway line in galaxy.starwayList) {
-			DrawLine (line.startPoint, line.endPoint);
+			DrawLine (line.StartPoint, line.EndPoint);
+			Debug.Log ("Drawline");
 		}
 	}
 
@@ -91,8 +94,8 @@ public class StarwayGen : MonoBehaviour {
 
 		foreach (Starway line2 in galaxy.starwayList) {
 
-			ps2 = line2.startPoint;
-			pe2 = line2.endPoint;
+			ps2 = line2.StartPoint;
+			pe2 = line2.EndPoint;
 
 			//Debug.Log (ps2 + " " + pe2);
 
