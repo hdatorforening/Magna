@@ -36,9 +36,11 @@ public class StarPlacementScript {
 
 		int failedPlacementsLoop = 0;
 
-		starStream [0] = startLoc;
-		AddStarToList (startLoc, starCurrent);
-		starCurrent++;
+		if (galaxy.starList.Count == 0) {
+			starStream [0] = startLoc;
+			AddStarToList (startLoc, starCurrent);
+			starCurrent++;
+		}
 
 		while (starCurrent < numberOfSystems) {
 			//if (systemPlacementDebug) { Debug.Log ("Number of Systems: " + numberOfSystems); }

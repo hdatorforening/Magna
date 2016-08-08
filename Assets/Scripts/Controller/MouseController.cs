@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MouseController : MonoBehaviour {
 
 	Vector3 lastFramePosition;
+
+	GameSettings gameSettings = new GameSettings();
+
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +28,9 @@ public class MouseController : MonoBehaviour {
 		}
 
 		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
+
+		gameSettings.cameraDistance += Input.GetAxis("Mouse ScrollWheel") * gameSettings.scrollSpeed;
+		gameSettings.cameraDistance = Mathf.Clamp(gameSettings.cameraDistance, gameSettings.cameraDistanceMin, gameSettings.cameraDistanceMax);
 
 	}
 }

@@ -2,27 +2,20 @@
 using System.Collections;
 
 public class Starway {
-	//public LineRenderer starway; // = new GameObject().AddComponent<LineRenderer> ();
-	Vector3 startPoint;
+	
+	Vector3 start;
+	public Vector3 Start { get { return start;} }
 
-	public Vector3 StartPoint {
-		get {
-			return startPoint;
-		}
-	}
+	Vector3 end;
+	public Vector3 End { get { return end;} }
 
-	Vector3 endPoint;
+	int id;
+	public int Id { get { return id;} }
 
-	public Vector3 EndPoint {
-		get {
-			return endPoint;
-		}
-	}
-
-	public Starway (/*LineRenderer line,*/ Vector3 start, Vector3 end){
-		//starway = line;
-		startPoint = start;
-		endPoint = end;
+	public Starway (int id, Vector3 start, Vector3 end){
+		this.id = id;
+		this.start = start;
+		this.end = end;
 	}
 }	
 

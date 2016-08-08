@@ -12,20 +12,10 @@ public class Star {
 	Galaxy galaxy;
 
 	int starID;
-
-	public int id {
-		get {
-			return starID;
-		}
-	}
+	public int id { get { return starID;} }
 
 	Vector3 starPosition;
-
-	public Vector3 position {
-		get {
-			return starPosition;
-		}
-	}
+	public Vector3 position { get { return starPosition;} }
 
 	public Star( Galaxy galaxy, Vector3 position, int id ){
 		this.galaxy = galaxy;

@@ -8,12 +8,16 @@ public class StarwayGen {
 
 	Galaxy galaxy;
 	Starway starway;
+	int starwayID;
 
 	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
 
+
 	public void GenerateStarways (Galaxy galaxy ,int starwayLenght){
 
+		//Setup
 		this.galaxy = galaxy;
+		starwayID = galaxy.starwayList.Count;
 
 		//LineRenderer [] newStarway = new LineRenderer[];
 		//LineRenderer newStarway = new LineRenderer;
@@ -31,7 +35,8 @@ public class StarwayGen {
 					lineEnd = destination.position;
 
 					if (!CheckStarwayCollision (lineStart, lineEnd)) {
-						galaxy.starwayList.Add (starway = new Starway (lineStart, lineEnd));
+						galaxy.starwayList.Add (starway = new Starway ( starwayID, lineStart, lineEnd));
+						starwayID++;
 					} else {
 
 					}
@@ -44,34 +49,9 @@ public class StarwayGen {
 		VogonConstructionFleet (1); //Ränsar ovälkomna starways.
 		StarwayCollision.Clear();
 
-		foreach (Starway line in galaxy.starwayList) {
-			DrawLine (line.StartPoint, line.EndPoint);
-			Debug.Log ("Drawline");
-		}
+
 	}
 
-	/*void SetupLine(Vector3 start, Vector3 end)
-	{
-		Starway newStarway = gameObject.AddComponent<Starway>();
-		newStarway.startPoint = start;
-		newStarway.endPoint = end;
-
-		starwayList.Add (newStarway);
-	}*/
-
-	void DrawLine (Vector3 start, Vector3 end)
-	{
-		var newLine = new GameObject().AddComponent<LineRenderer> ();
-
-		newLine.sortingLayerName = "OnTop";
-		newLine.sortingOrder = 5;
-		newLine.SetVertexCount(2);
-		newLine.SetPosition(0, start);
-		newLine.SetPosition(1, end);
-		newLine.SetWidth(0.04f, 0.04f);
-		newLine.useWorldSpace = true;
-		newLine.SetColors (Color.white, Color.white);
-	}
 
 	bool CheckStarwayCollision(Vector3 start, Vector3 end){
 		Vector3 ps1, pe1, ps2, pe2;
@@ -94,8 +74,8 @@ public class StarwayGen {
 
 		foreach (Starway line2 in galaxy.starwayList) {
 
-			ps2 = line2.StartPoint;
-			pe2 = line2.EndPoint;
+			ps2 = line2.Start;
+			pe2 = line2.End;
 
 			//Debug.Log (ps2 + " " + pe2);
 
@@ -143,30 +123,6 @@ public class StarwayGen {
 		return false;
 	}
 
-	/*Vector2 LineIntersectionPoint(Vector3 ps1, Vector3 pe1, Vector3 ps2, 
-		Vector3 pe2)
-	{
-		// Get A,B,C of first line - points : ps1 to pe1
-		float A1 = pe1.y-ps1.y;
-		float B1 = ps1.x-pe1.x;
-		float C1 = A1*ps1.x+B1*ps1.y;
-
-		// Get A,B,C of second line - points : ps2 to pe2
-		float A2 = pe2.y-ps2.y;
-		float B2 = ps2.x-pe2.x;
-		float C2 = A2*ps2.x+B2*ps2.y;
-
-		// Get delta and check if the lines are parallel
-		float delta = A1*B2 - A2*B1;
-		if(delta == 0)
-			throw new System.Exception("Lines are parallel");
-
-		// now return the Vector2 intersection point
-		return new Vector2(
-			(B2*C1 - B1*C2)/delta,
-			(A1*C2 - A2*C1)/delta
-		);
-	}*/
 
 	bool notRect(Vector3 p1, Vector3 p2, Vector3 intersect){
 		bool sect = false;
@@ -202,6 +158,7 @@ public class StarwayGen {
 		return false;
 
 	}
+
 
 	void VogonConstructionFleet(int operation){
 		if (operation == 1) { //Rensar lägre stående starways.
