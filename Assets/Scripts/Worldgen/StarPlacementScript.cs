@@ -13,10 +13,16 @@ public class StarPlacementScript {
 	float maxStarDistance;
 	float minStarDistance;
 
-	WorldGenScript worldGenScript;
+	//WorldGenScript worldGenScript;
 	GameController gameController;
+	Galaxy galaxy;
+	GameSettings gameSettings = new GameSettings ();
 
-	public void GenerateStarCluster(int numberOfSystems, Vector3 startLoc = default (Vector3)){
+	Star star;
+
+	public void GenerateStarCluster(Galaxy galaxy ,int numberOfSystems, Vector3 startLoc = default (Vector3)){
+
+		this.galaxy = galaxy;
 
 		systemPlacementDebug = true;
 
@@ -31,6 +37,7 @@ public class StarPlacementScript {
 		int failedPlacementsLoop = 0;
 
 		starStream [0] = startLoc;
+		AddStarToList (startLoc, starCurrent);
 		starCurrent++;
 
 		while (starCurrent < numberOfSystems) {
@@ -46,9 +53,7 @@ public class StarPlacementScript {
 		}
 
 		if (systemPlacementDebug) { Debug.Log ("GenerateStarPlacement"); }
-		foreach (Vector3 pos in starStream) {
-			GenerateStarPlacement (pos);
-		}
+
 
 		if (systemPlacementDebug) {
 			Debug.Log ("Failed Placements Loops: " + failedPlacementsLoop);
@@ -58,8 +63,8 @@ public class StarPlacementScript {
 
 	bool GenerateStarLocation(int parentID){
 
-		maxStarDistance = 7;
-		minStarDistance = 1;
+		maxStarDistance = gameSettings.maxStarDistance;
+		minStarDistance = gameSettings.minStarDistance;
 
 		if (parentID < 0) {
 			parentID = 0;
@@ -81,6 +86,8 @@ public class StarPlacementScript {
 
 				if (!failed) {
 					starStream [starCurrent] = pos;
+					AddStarToList (pos, starCurrent);
+					Debug.Log (starCurrent);
 					starCurrent++;
 					return true;
 				}
@@ -89,14 +96,9 @@ public class StarPlacementScript {
 		return false;
 	}
 
-	void GenerateStarPlacement(Vector3 coords){
-		GameObject star_go = new GameObject ();
-		star_go.name = "Star_" + starCurrent;
-		star_go.transform.position = coords;
-
-		SpriteRenderer star_sr = star_go.AddComponent<SpriteRenderer> ();
-		star_sr.sprite = gameController.starSprite;
-		//worldGenScript.starList.Add (Instantiate (worldGenScript.starPrefab, coords, Quaternion.identity));
+	void AddStarToList(Vector3 coord, int starID){
+		galaxy.starList.Add( star = new Star (galaxy, coord, starCurrent) );
 	}
+
 }
 

@@ -3,19 +3,23 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Galaxy {
 
-	//Calling scripts
+	GameSettings gameSettings = new GameSettings();
+
 	StarPlacementScript starPlacementScript = new StarPlacementScript();
+	StarwayGen starwayGen = new StarwayGen ();
 
-
-	public List<Object> starList = new List<Object>(); //List of all existing stars
+	public List<Star> starList = new List<Star>(); //List of all existing stars
 	public List<Starway> starwayList = new List<Starway>(); //List of all existing starways
 
-	public void GenerateGalaxy(int numberOfSystems = 100){
+	public Galaxy( int numberOfSystems = 100){
 		Debug.Log ("New Galaxy created");
 
-		starPlacementScript.GenerateStarCluster (numberOfSystems);
+		starPlacementScript.GenerateStarCluster (this, numberOfSystems);
+
+		starwayGen.GenerateStarways (this, gameSettings.starwayLenght);
 	}
 
 }

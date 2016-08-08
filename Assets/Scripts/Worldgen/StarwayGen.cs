@@ -1,75 +1,38 @@
 ﻿using UnityEngine;
-using System.Linq;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
+public class StarwayGen : MonoBehaviour {
 
-public class WorldGenScript : MonoBehaviour {
+	Galaxy galaxy;
 
-	//Imports
-	public StarPlacementScript starPlacementScript;
-
-	//Proper stuff
-	public float worldSize;
-
-	public GameObject starPrefab;
-	public Material lineMaterial;
-
-	//Public lists
-	public List<Object> starList = new List<Object>(); //List of all existing stars
-	public List<Starway> starwayList = new List<Starway>(); //List of all existing starways
 	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
 
-	Quaternion quat;
+	public void GenerateStarways (Galaxy galaxy ,int starwayLenght){
 
-	Vector3 lineStart;
-	Vector3 lineEnd;
+		this.galaxy = galaxy;
 
-
-	// Use this for initialization
-	void Start () {
-
-		int numberOfStars = 200;
-		int starwayLenght = 4;
-		worldSize = 10f;
-		Camera.main.orthographicSize = worldSize;
-
-		GenerateStars (numberOfStars);
-		GenerateStarWays (starwayLenght);
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-	void GenerateStars (int numberOfStars){
-
-		starPlacementScript = GetComponent<StarPlacementScript> ();
-		starPlacementScript.GenerateStarCluster(numberOfStars);
-
-	}
-
-	void GenerateStarWays (int starwayLenght){
 		//LineRenderer [] newStarway = new LineRenderer[];
 		//LineRenderer newStarway = new LineRenderer;
 		bool alreadyGenerated;
 
+		Vector3 lineStart, lineEnd;
 
-		foreach(GameObject star in starList){
-			foreach (GameObject destination in starList){
-				star.GetComponent<StarScript> ().starwayGen = true;
-				alreadyGenerated = destination.GetComponent<StarScript>().starwayGen;
+		foreach(Star star in galaxy.starList){
+			foreach (Star destination in galaxy.starList){
+				star.starwayGen = true;
+				alreadyGenerated = destination.starwayGen;
 
-				if ((star != destination) && !alreadyGenerated && (Vector2.Distance(star.transform.position, destination.transform.position)) < starwayLenght ) {
-					lineStart = star.transform.position;
-					lineEnd = destination.transform.position;
+				if ((star != destination) && !alreadyGenerated && (Vector2.Distance(star.position, destination.position)) < starwayLenght ) {
+					lineStart = star.position;
+					lineEnd = destination.position;
 
 					if (!CheckStarwayCollision (lineStart, lineEnd)) {
 						//SetupLine (lineStart, lineEnd);
 					} else {
-						
+
 					}
 				}
 			}
@@ -79,7 +42,7 @@ public class WorldGenScript : MonoBehaviour {
 		VogonConstructionFleet (1); //Ränsar ovälkomna starways.
 		StarwayCollision.Clear();
 
-		foreach (Starway line in starwayList) {
+		foreach (Starway line in galaxy.starwayList) {
 			DrawLine (line.startPoint, line.endPoint);
 		}
 	}
@@ -104,7 +67,7 @@ public class WorldGenScript : MonoBehaviour {
 		newLine.SetPosition(1, end);
 		newLine.SetWidth(0.04f, 0.04f);
 		newLine.useWorldSpace = true;
-		newLine.material = lineMaterial;
+		newLine.SetColors (Color.white, Color.white);
 	}
 
 	bool CheckStarwayCollision(Vector3 start, Vector3 end){
@@ -126,7 +89,7 @@ public class WorldGenScript : MonoBehaviour {
 
 		//Debug.Log ("\n New Line");
 
-		foreach (Starway line2 in starwayList) {
+		foreach (Starway line2 in galaxy.starwayList) {
 
 			ps2 = line2.startPoint;
 			pe2 = line2.endPoint;
@@ -240,7 +203,7 @@ public class WorldGenScript : MonoBehaviour {
 	void VogonConstructionFleet(int operation){
 		if (operation == 1) { //Rensar lägre stående starways.
 			foreach (int index in StarwayCollision) {
-				starwayList.RemoveAt (index);
+				galaxy.starwayList.RemoveAt (index);
 			}
 		} /*else if (operation == 2) { //Skjuter vilt med dekonstuktionslaser.
 			int i;
@@ -252,74 +215,4 @@ public class WorldGenScript : MonoBehaviour {
 			}
 		}*/
 	}
-
-
-	//------------------------------------------------------------------------------------------------
-
-	/*Vector3[] starStream;
-	int starCurrent;
-	float maxStarDistance;
-	float minStarDistance;
-
-	WorldGenScript worldGen;
-
-	public void GenerateStarCluster(int numberOfSystems, Vector3 startLoc = default (Vector3)){
-		starStream = new Vector3[numberOfSystems];
-
-		int starParent = 0;
-		starCurrent = 0;
-
-		starStream [0] = startLoc;
-		starCurrent++;
-
-		while (starCurrent < numberOfSystems) {
-			//int genPar = (int) ((starParent - 4) / 1.1f);
-			GenerateStarLocation ((int) ((starParent - 4) / 1.1f));
-			starParent++;
-		}
-
-		foreach (Vector3 pos in starStream) {
-			GenerateStarPlacement (pos);
-		}
-
-	}
-	
-	bool GenerateStarLocation(int parentID){
-
-		maxStarDistance = 8;
-		minStarDistance = 1;
-
-		if (parentID < 0) {
-			parentID = 0;
-		}
-		bool failed = false;
-
-		worldGen = GetComponent<WorldGenScript> ();
-		for (int i = 0; i < 5; i++) {
-			Vector3 pos = Random.insideUnitCircle * maxStarDistance;
-			if (Vector3.Distance (new Vector3 (0, 0, 0), pos) > minStarDistance) {
-				pos += starStream [parentID];
-
-				for (int n = 0; n < starCurrent; n++) {
-					if (Vector3.Distance (starStream[n], pos) <= minStarDistance) {
-						failed = true;
-						break;
-					}
-				}
-
-				if (!failed) {
-					starStream [starCurrent] = pos;
-					starCurrent++;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	void GenerateStarPlacement(Vector3 coords){
-		worldGen.starList.Add (Instantiate (worldGen.starPrefab, coords, Quaternion.identity));
-	}*/
-
-
 }
