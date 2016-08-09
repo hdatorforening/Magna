@@ -3,9 +3,13 @@ using System.Collections;
 
 public class GameSettings {
 
+	//Sector Settings
+	public float sectorSize = 10f;
+
 	//Star Settings
-	public int numberOfStars = 2000;
-	public float maxStarDistance = 8.0f;
+	//public int numberOfStars = 2000;
+	public float starSize = 0.3f;
+	//public float maxStarDistance = 8.0f;
 	public float minStarDistance = 2.0f;
 
 

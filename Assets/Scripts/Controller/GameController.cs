@@ -3,6 +3,32 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
+	float time = 0;
+	int[] statistik = new int[11];
+	float num;
+	Sector tmpsect;
+
+	void Update(){
+
+		/*time += Time.deltaTime;
+		if (time > 10f) {
+			time = 0;
+
+			foreach (Sector sector in galaxy.sectorList) {
+				sector.starList.Clear ();
+				sector.GenerateSector (10);
+			}
+
+			foreach (Sector sector in galaxy.sectorList) {
+				foreach (Star star in sector.starList) {
+					DrawStar (star);
+				}
+				tmpsect = sector;
+			}
+				
+		}*/
+	}
+
 	GameObject dummyStar;
 	GameObject dummyStarway;
 
@@ -17,12 +43,12 @@ public class GameController : MonoBehaviour {
 	void Start () {
 		Setup ();
 
-		galaxy = new Galaxy (gameSettings.numberOfStars);
+		galaxy = new Galaxy ();
 
-		Debug.Log (galaxy.starList.Count);
-
-		foreach (Star star in galaxy.starList) {
-			DrawStar (star);
+		foreach (Sector sector in galaxy.sectorList) {
+			foreach (Star star in sector.starList) {
+				DrawStar (star);
+			}
 		}
 
 		foreach (Starway line in galaxy.starwayList) {
@@ -46,13 +72,20 @@ public class GameController : MonoBehaviour {
 
 	void DrawStar(Star star){
 		GameObject star_go = new GameObject ();
-		star_go.name = "Star_" +star.id;
+		star_go.name = "Star";
 		star_go.transform.position = star.position;
-		star_go.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
+
+		star_go.transform.localScale = new Vector3 (
+			gameSettings.starSize, 
+			gameSettings.starSize, 
+			gameSettings.starSize
+		);
+
 		star_go.transform.SetParent (dummyStar.transform, true);
 
 		SpriteRenderer star_sr = star_go.AddComponent<SpriteRenderer> ();
 		star_sr.sprite = starSprite;
+		//Destroy (star_go, Time.deltaTime);
 	}
 		
 	void DrawStarway (Starway line){

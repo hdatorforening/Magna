@@ -9,37 +9,51 @@ public class StarwayGen {
 	Galaxy galaxy;
 	Starway starway;
 	int starwayID;
+	int starwayLenght;
+	Sector.directions dir;
 
 	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
 
 
 	public void GenerateStarways (Galaxy galaxy ,int starwayLenght){
+		
 
 		//Setup
 		this.galaxy = galaxy;
+		this.starwayLenght = starwayLenght;
+
 		starwayID = galaxy.starwayList.Count;
 
 		//LineRenderer [] newStarway = new LineRenderer[];
 		//LineRenderer newStarway = new LineRenderer;
-		bool alreadyGenerated;
 
-		Vector3 lineStart, lineEnd;
 
-		foreach(Star star in galaxy.starList){
-			foreach (Star destination in galaxy.starList){
+		foreach(Sector sector in galaxy.sectorList){
+			foreach (Star star in sector.starList){
 				star.starwayGen = true;
-				alreadyGenerated = destination.starwayGen;
 
-				if ((star != destination) && !alreadyGenerated && (Vector2.Distance(star.position, destination.position)) < starwayLenght ) {
-					lineStart = star.position;
-					lineEnd = destination.position;
+				//Alla stjärnor i samma sektor
+				foreach (Star destination in sector.starList) {
 
-					if (!CheckStarwayCollision (lineStart, lineEnd)) {
-						galaxy.starwayList.Add (starway = new Starway ( starwayID, lineStart, lineEnd));
-						starwayID++;
-					} else {
+					StarwayCalculator (star, destination);
+				}
 
+				Debug.Log (sector.neighbours [0]);
+
+				for (int i = 0; i < 8; i++) {
+
+					sector.CheckNeighbours (i);
+
+					int count = 0;
+					if (sector.neighbours [i] != null) {
+						foreach (var destination in sector.neighbours[i].starList) {
+							StarwayCalculator (star, destination);
+							count++;
+							if (count > 1000)
+								break;
+						}
 					}
+
 				}
 			}
 		}
@@ -50,6 +64,23 @@ public class StarwayGen {
 		StarwayCollision.Clear();
 
 
+	}
+
+
+	void StarwayCalculator(Star star, Star destination){
+		Vector3 lineStart, lineEnd;
+		bool alreadyGenerated = destination.starwayGen;
+		if ((star != destination) && !alreadyGenerated && (Vector2.Distance (star.position, destination.position)) < starwayLenght) {
+			lineStart = star.position;
+			lineEnd = destination.position;
+
+			if (!CheckStarwayCollision (lineStart, lineEnd)) {
+				galaxy.starwayList.Add (starway = new Starway (starwayID, lineStart, lineEnd));
+				starwayID++;
+			} else {
+
+			}
+		}
 	}
 
 
