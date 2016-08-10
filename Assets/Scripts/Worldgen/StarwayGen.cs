@@ -10,7 +10,6 @@ using Funktioner;
 public class StarwayGen {
 
 	Galaxy galaxy;
-	Starway starway;
 	int starwayID;
 	Sector.directions dir;
 
@@ -79,7 +78,7 @@ public class StarwayGen {
 			lineEnd = destination.position;
 
 			if (!CheckStarwayCollision (lineStart, lineEnd)) {
-				galaxy.starwayList.Add (starway = new Starway (starwayID, lineStart, lineEnd));
+				galaxy.starwayList.Add (new Starway (starwayID, lineStart, lineEnd));
 				starwayID++;
 			} else {
 
@@ -89,6 +88,8 @@ public class StarwayGen {
 
 
 	bool CheckStarwayCollision(Vector3 start, Vector3 end){
+		Profiler.BeginSample ("CheckStarwayCollision()");
+
 		Vector3 ps1, pe1, ps2, pe2;
 
 		int itemNumber = 0;
@@ -146,6 +147,8 @@ public class StarwayGen {
 								}
 							} else {
 								//Debug.Log ("Stop");
+
+								Profiler.EndSample ();
 								return true;
 							}
 						}
@@ -155,6 +158,7 @@ public class StarwayGen {
 			itemNumber++;
 		}
 
+		Profiler.EndSample ();
 		return false;
 	}
 
@@ -198,6 +202,8 @@ public class StarwayGen {
 
 
 	void VogonConstructionFleet(int operation){
+		Profiler.BeginSample ("VogonConstructionFleet()");
+
 		if (operation == 1) { //Rensar lägre stående starways.
 			foreach (int index in StarwayCollision) {
 				galaxy.starwayList.RemoveAt (index);
@@ -205,6 +211,7 @@ public class StarwayGen {
 			}
 
 		} 
+
 		/*else if (operation == 2) { //Skjuter vilt med dekonstuktionslaser.
 			int i;
 			int u;
@@ -214,5 +221,7 @@ public class StarwayGen {
 				}
 			}
 		}*/
+
+		Profiler.EndSample ();
 	}
 }

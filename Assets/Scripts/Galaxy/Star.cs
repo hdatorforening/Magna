@@ -9,7 +9,7 @@ public class Star {
 	public bool starwayGen = false;
 	public List<Star> connectedStars = new List<Star>(); //Alla stjärnor som denna stjärna har anslutning till.
 
-	Sector sector;
+	Sector sector; //TODO - Används inte, kanske bör tas bort.
 
 	int starID;
 	public int id { get { return starID;} }

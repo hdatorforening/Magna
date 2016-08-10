@@ -90,21 +90,23 @@ public class Sector {
 			//Gammal stjärnplacering
 			foreach (var starCheck in starList) {
 				//Debug.Log (Vector3.Distance (starCheck.position, starPos));
-				if (Vector3.Distance (starCheck.position, starPos) <= GameSettings.minStarDistance){
+				if (Vector3.Distance (starCheck.position, starPos) <= GameSettings.minStarDistance) {
 					//Debug.Log("failed");
 					failed = true;
 					break;
 				}
+			}
 
+			if (!failed) {
 				for (int i = 0; i < 8; i++) {
 
 					CheckNeighbours (i);
 
 					int count = 0;
 					if (neighbours [i] != null) {
-						foreach (Star destination in neighbours[i].starList) {
+						foreach (Star starCheck in neighbours[i].starList) {
 
-							if (Vector3.Distance (starCheck.position, starPos) <= GameSettings.minStarDistance){
+							if (Vector3.Distance (starCheck.position, starPos) <= GameSettings.minStarDistance) {
 								//Debug.Log("failed");
 								failed = true;
 								break;
@@ -117,25 +119,29 @@ public class Sector {
 							}
 						}
 					}
+					if (failed) {
+						break;
+					}
 
 				}
-
-				//Eventuell kod för att optimera intersector beräkningar.
-				/*
-				if (north) {
-				} else if (south) {
-				}
-				if (east)
-
-
-				NotRect.notRect (
-					this.position - sectorOffset (GameSettings.sectorSize / 2, GameSettings.sectorSize / 2, 0),
-					this.position + sectorOffset (GameSettings.sectorSize / 2, GameSettings.sectorSize / 2, 0),
-
-				);
-				*/
-
 			}
+
+			//Eventuell kod för att optimera intersector beräkningar.
+			/*
+			if (north) {
+			} else if (south) {
+			}
+			if (east)
+
+
+			NotRect.notRect (
+				this.position - sectorOffset (GameSettings.sectorSize / 2, GameSettings.sectorSize / 2, 0),
+				this.position + sectorOffset (GameSettings.sectorSize / 2, GameSettings.sectorSize / 2, 0),
+
+			);
+			*/
+
+
 
 			if (!failed) {
 				
