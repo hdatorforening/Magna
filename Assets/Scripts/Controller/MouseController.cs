@@ -7,7 +7,7 @@ public class MouseController : MonoBehaviour {
 
 	Vector3 lastFramePosition;
 
-	GameSettings gameSettings = new GameSettings();
+	//GameSettings gameSettings = new GameSettings();
 
 
 	// Use this for initialization
@@ -29,8 +29,8 @@ public class MouseController : MonoBehaviour {
 
 		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
-		gameSettings.cameraDistance += Input.GetAxis("Mouse ScrollWheel") * gameSettings.scrollSpeed;
-		gameSettings.cameraDistance = Mathf.Clamp(gameSettings.cameraDistance, gameSettings.cameraDistanceMin, gameSettings.cameraDistanceMax);
+		//gameSettings.cameraDistance += Input.GetAxis("Mouse ScrollWheel") * gameSettings.scrollSpeed;
+		//gameSettings.cameraDistance = Mathf.Clamp(gameSettings.cameraDistance, gameSettings.cameraDistanceMin, gameSettings.cameraDistanceMax);
 
 	}
 }

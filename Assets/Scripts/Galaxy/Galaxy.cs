@@ -3,10 +3,11 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using gameSettings;
 
 public class Galaxy {
 
-	GameSettings gameSettings = new GameSettings();
+	//GameSettings gameSettings = new GameSettings();
 
 	//StarPlacementScript starPlacementScript = new StarPlacementScript();
 	StarwayGen starwayGen = new StarwayGen ();
@@ -18,18 +19,16 @@ public class Galaxy {
 	public Galaxy(){
 		Debug.Log ("New Galaxy created");
 
-		//starPlacementScript.GenerateStarCluster (this, numberOfSystems);
-		for (int x = -2; x < 3; x++) {
-			for (int y = -2; y < 3; y++) {
-				Sector newSector = GetSector(x,y);
-				newSector.GenerateSector ();
-				sectorList.Add( newSector );
+		for (int x = -5; x < 6; x++) {
+			for (int y = -5; y < 6; y++) {
+				GetSector(x,y);
 			}
+			
 		}
 
 
-		starwayGen.GenerateStarways (this, gameSettings.starwayLenght);
-		Debug.Log (sectorList);
+
+		starwayGen.GenerateStarways (this);
 	}
 
 	Sector GetSector(int x, int y){
@@ -37,7 +36,7 @@ public class Galaxy {
 			if (sector.X == x && sector.Y == y) { return sector; }
 		}
 
-		Sector newSector = new Sector (x, y, gameSettings);
+		Sector newSector = new Sector (x, y, this);
 		sectorList.Add (newSector);
 		return newSector;
 	}

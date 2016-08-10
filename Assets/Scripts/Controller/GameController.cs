@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using gameSettings;
+
 public class GameController : MonoBehaviour {
 
-	float time = 0;
-	int[] statistik = new int[11];
+	//float time = 0;
 	float num;
 	Sector tmpsect;
 
-	void Update(){
+	//void Update(){
 
 		/*time += Time.deltaTime;
 		if (time > 10f) {
@@ -27,7 +28,7 @@ public class GameController : MonoBehaviour {
 			}
 				
 		}*/
-	}
+	//}
 
 	GameObject dummyStar;
 	GameObject dummyStarway;
@@ -36,8 +37,6 @@ public class GameController : MonoBehaviour {
 	public Sprite starSprite;
 
 	Galaxy galaxy;
-
-	GameSettings gameSettings = new GameSettings();
 
 	// Use this for initialization
 	void Start () {
@@ -58,7 +57,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	void Setup(){
-		Camera.main.orthographicSize = gameSettings.worldSize;
+		Camera.main.orthographicSize = GameSettings.worldSize;
 
 		dummyStar = new GameObject ("Stars");
 		dummyStar.transform.position = new Vector3 ();
@@ -71,14 +70,15 @@ public class GameController : MonoBehaviour {
 	}
 
 	void DrawStar(Star star){
+		Profiler.BeginSample ("DrawStar()");
 		GameObject star_go = new GameObject ();
 		star_go.name = "Star";
 		star_go.transform.position = star.position;
 
 		star_go.transform.localScale = new Vector3 (
-			gameSettings.starSize, 
-			gameSettings.starSize, 
-			gameSettings.starSize
+			GameSettings.starSize, 
+			GameSettings.starSize, 
+			GameSettings.starSize
 		);
 
 		star_go.transform.SetParent (dummyStar.transform, true);
@@ -86,9 +86,11 @@ public class GameController : MonoBehaviour {
 		SpriteRenderer star_sr = star_go.AddComponent<SpriteRenderer> ();
 		star_sr.sprite = starSprite;
 		//Destroy (star_go, Time.deltaTime);
+		Profiler.EndSample ();
 	}
 		
 	void DrawStarway (Starway line){
+		Profiler.BeginSample ("DrawStarway()");
 		
 		Vector3 start = line.Start;
 		Vector3 end = line.End;
@@ -108,6 +110,8 @@ public class GameController : MonoBehaviour {
 		newLine.useWorldSpace = true;
 		newLine.SetColors (Color.white, Color.white);
 		newLine.material = whiteStarway;
+
+		Profiler.EndSample ();
 	}
 
 }

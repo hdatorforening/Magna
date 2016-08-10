@@ -4,23 +4,25 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
+using gameSettings;
+using Funktioner;
+
 public class StarwayGen {
 
 	Galaxy galaxy;
 	Starway starway;
 	int starwayID;
-	int starwayLenght;
 	Sector.directions dir;
 
 	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
 
 
-	public void GenerateStarways (Galaxy galaxy ,int starwayLenght){
+	public void GenerateStarways (Galaxy galaxy){
+		Profiler.BeginSample ("GenerateStarways()");
 		
 
 		//Setup
 		this.galaxy = galaxy;
-		this.starwayLenght = starwayLenght;
 
 		starwayID = galaxy.starwayList.Count;
 
@@ -38,7 +40,7 @@ public class StarwayGen {
 					StarwayCalculator (star, destination);
 				}
 
-				Debug.Log (sector.neighbours [0]);
+				//Debug.Log (sector.neighbours [0]);
 
 				for (int i = 0; i < 8; i++) {
 
@@ -46,11 +48,13 @@ public class StarwayGen {
 
 					int count = 0;
 					if (sector.neighbours [i] != null) {
-						foreach (var destination in sector.neighbours[i].starList) {
+						foreach (Star destination in sector.neighbours[i].starList) {
 							StarwayCalculator (star, destination);
 							count++;
-							if (count > 1000)
+							if (count > 1000) {
+								Debug.LogError ("Game stuck in StarwayGen loop");
 								break;
+							}
 						}
 					}
 
@@ -63,14 +67,14 @@ public class StarwayGen {
 		VogonConstructionFleet (1); //Ränsar ovälkomna starways.
 		StarwayCollision.Clear();
 
-
+		Profiler.EndSample ();
 	}
 
 
 	void StarwayCalculator(Star star, Star destination){
 		Vector3 lineStart, lineEnd;
 		bool alreadyGenerated = destination.starwayGen;
-		if ((star != destination) && !alreadyGenerated && (Vector2.Distance (star.position, destination.position)) < starwayLenght) {
+		if ((star != destination) && !alreadyGenerated && (Vector2.Distance (star.position, destination.position)) < GameSettings.starwayLenght) {
 			lineStart = star.position;
 			lineEnd = destination.position;
 
@@ -131,9 +135,9 @@ public class StarwayGen {
 				if ( !(intersection == start || intersection == end) ) {
 					//Debug.Log ("Intersection? \n P1 "+ps1+", "+pe1+" : P2 "+ps2+ ", "+pe2);
 
-					if (notRect (ps1, pe1, intersection)) {
+					if (NotRect.notRect (ps1, pe1, intersection)) {
 						//Debug.Log ("Rect1");
-						if (notRect (ps2, pe2, intersection)) {
+						if (NotRect.notRect (ps2, pe2, intersection)) {
 							//Debug.Log ("Rect2");
 							if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
 								//Debug.Log ("Shorter.");
@@ -155,6 +159,7 @@ public class StarwayGen {
 	}
 
 
+	/*
 	bool notRect(Vector3 p1, Vector3 p2, Vector3 intersect){
 		bool sect = false;
 
@@ -189,14 +194,18 @@ public class StarwayGen {
 		return false;
 
 	}
+	*/
 
 
 	void VogonConstructionFleet(int operation){
 		if (operation == 1) { //Rensar lägre stående starways.
 			foreach (int index in StarwayCollision) {
 				galaxy.starwayList.RemoveAt (index);
+
 			}
-		} /*else if (operation == 2) { //Skjuter vilt med dekonstuktionslaser.
+
+		} 
+		/*else if (operation == 2) { //Skjuter vilt med dekonstuktionslaser.
 			int i;
 			int u;
 			for (i = 0; i++; i < starwayList.Count() ) {

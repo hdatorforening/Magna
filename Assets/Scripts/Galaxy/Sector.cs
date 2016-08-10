@@ -3,9 +3,12 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using gameSettings;
+using Funktioner;
+
 public class Sector {
 
-	GameSettings gameSettings;
+	//GameSettings gameSettings;
 
 	Galaxy galaxy;
 
@@ -38,32 +41,33 @@ public class Sector {
 
 	public List<Star> starList = new List<Star>();
 
-	public Sector (int x, int y, GameSettings gameSettings) {
+	public Sector (int x, int y, Galaxy galaxy) {
 
-		this.gameSettings = gameSettings;
+		this.galaxy = galaxy;
 
-		float sectorSize = gameSettings.sectorSize;
+		float sectorSize = GameSettings.sectorSize;
 
 		this.x = x;
 		this.y = y;
 
 		this.position = new Vector3 (x * sectorSize, y * sectorSize, 0);
 
-		GenerateSector (Random.Range(3, 15));
+		GenerateSector (Random.Range(2, 8) + Random.Range(2, 8) + Random.Range(2, 8));
 
 	}
 
 	public bool GenerateSector(int starsToGenerate = 10){
+		Profiler.BeginSample ("GenerateSector()");
+
 		//Debug.Log (starsToGenerate);
-		float sectorSize = gameSettings.sectorSize;
+		float sectorSize = GameSettings.sectorSize;
 		bool failed = false;
-		Star star;
 		int starCurrent = 0;
 		//Vector3[] starStream = new Vector3[starsToGenerate];
 
 		if (x == y && x == 0) {
 			//starStream [starCurrent] = new Vector3(0, 0, 0);
-			starList.Add (star = new Star (this, new Vector3(5f, 5f, 0), starCurrent));
+			starList.Add (new Star (this, new Vector3(0f, 0f, 0), starCurrent));
 			//Debug.Log (starCurrent);
 			starCurrent++;
 		}
@@ -81,21 +85,62 @@ public class Sector {
 			starPos = starPos + position;
 			//if (systemPlacementDebug) { Debug.Log (parentID); }
 
+			//Vector3 sectorOffset; //Del av ev. optimering av intersector beräknignar.
 
 			//Gammal stjärnplacering
 			foreach (var starCheck in starList) {
 				//Debug.Log (Vector3.Distance (starCheck.position, starPos));
-				if (Vector3.Distance (starCheck.position, starPos) <= gameSettings.minStarDistance){
+				if (Vector3.Distance (starCheck.position, starPos) <= GameSettings.minStarDistance){
 					//Debug.Log("failed");
 					failed = true;
 					break;
 				}
+
+				for (int i = 0; i < 8; i++) {
+
+					CheckNeighbours (i);
+
+					int count = 0;
+					if (neighbours [i] != null) {
+						foreach (Star destination in neighbours[i].starList) {
+
+							if (Vector3.Distance (starCheck.position, starPos) <= GameSettings.minStarDistance){
+								//Debug.Log("failed");
+								failed = true;
+								break;
+							}
+
+							count++;
+							if (count > 1000) {
+								Debug.LogError ("Game stuck in GenerateSector() loop");
+								break;
+							}
+						}
+					}
+
+				}
+
+				//Eventuell kod för att optimera intersector beräkningar.
+				/*
+				if (north) {
+				} else if (south) {
+				}
+				if (east)
+
+
+				NotRect.notRect (
+					this.position - sectorOffset (GameSettings.sectorSize / 2, GameSettings.sectorSize / 2, 0),
+					this.position + sectorOffset (GameSettings.sectorSize / 2, GameSettings.sectorSize / 2, 0),
+
+				);
+				*/
+
 			}
 
 			if (!failed) {
 				
 				//starStream [starCurrent] = starPos;
-				starList.Add (star = new Star (this, starPos, starCurrent));
+				starList.Add (new Star (this, starPos, starCurrent));
 				//Debug.Log (starCurrent);
 				starCurrent++;
 				tries = 0;
@@ -110,11 +155,13 @@ public class Sector {
 			}
 
 		}
+		Profiler.EndSample ();
 		return false;
 	}
 
 	public Sector CheckNeighbours(int i){
-		Debug.Log (i);
+		//Debug.Log (i);
+		//Debug.Log (neighbours [i]);
 		if (neighbours [i] == null) {
 			foreach (Sector sectorNeighbour in galaxy.sectorList) {
 				if (i == 0) {
