@@ -19,12 +19,10 @@ namespace gameSettings{
 
 
 		//Camera Settings
-		public static int worldSize = 50;
+		public static float cameraSizeGalaxy = 50f;
 
-		public static float cameraDistanceMax = 20f;
-		public static float cameraDistanceMin = 5f;
-		public static float cameraDistance = 10f;
-		public static float scrollSpeed = 0.5f;
+		public static float scrollSpeed = 1f;
+		public static float scrollToMouseSpeed = 5f;
 		
 	}
 }

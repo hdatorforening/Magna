@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using gameSettings;
+
 public class MouseController : MonoBehaviour {
 
 	Vector3 lastFramePosition;
@@ -22,14 +24,20 @@ public class MouseController : MonoBehaviour {
 
 		if (Input.GetMouseButton (1)) { //Right Mouse Button
 
-			Vector3 diff = lastFramePosition - currFramePosition;
-			Camera.main.transform.Translate (diff);
+			Camera.main.transform.Translate (lastFramePosition - currFramePosition);
 
 		}
 
 		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
-		//gameSettings.cameraDistance += Input.GetAxis("Mouse ScrollWheel") * gameSettings.scrollSpeed;
+
+
+		GameSettings.cameraSizeGalaxy -= Input.GetAxis("Mouse ScrollWheel") * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
+		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
+
+		//Camera.main.transform.Translate ( Camera.main.ViewportToScreenPoint ( Input.mousePosition ) * Input.GetAxis("Mouse ScrollWheel") * GameSettings.scrollToMouseSpeed );
+		//Debug.Log (Camera.main.transform.position);
+		//Debug.Log (GameSettings.cameraSizeGalaxy);
 		//gameSettings.cameraDistance = Mathf.Clamp(gameSettings.cameraDistance, gameSettings.cameraDistanceMin, gameSettings.cameraDistanceMax);
 
 	}

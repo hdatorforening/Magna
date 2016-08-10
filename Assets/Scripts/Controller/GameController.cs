@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	void Setup(){
-		Camera.main.orthographicSize = GameSettings.worldSize;
+		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
 
 		dummyStar = new GameObject ("Stars");
 		dummyStar.transform.position = new Vector3 ();
