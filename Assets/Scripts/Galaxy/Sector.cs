@@ -45,6 +45,7 @@ public class Sector {
 	public List<Starway> starwayList = new List<Starway> ();
 
 	public Sector (int x, int y, Galaxy galaxy) {
+		Debug.Log ("New Sector Generated.");
 
 		this.galaxy = galaxy;
 

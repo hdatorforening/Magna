@@ -114,6 +114,8 @@ public class GameController : MonoBehaviour {
 		newLine.SetColors (Color.white, Color.white);
 		newLine.material = whiteStarway;
 
+		line.gameObject = lineObj;
+
 		Profiler.EndSample ();
 	}
 

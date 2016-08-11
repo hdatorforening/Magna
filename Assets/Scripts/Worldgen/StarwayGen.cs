@@ -82,7 +82,7 @@ namespace starwayGen{
 				lineEnd = destination.position;
 
 				if (!CheckStarwayCollision (lineStart, lineEnd, sector)) {
-					sector.starwayList.Add (new Starway (starwayID, lineStart, lineEnd));
+					sector.starwayList.Add (new Starway (starwayID, lineStart, lineEnd, star, destination));
 					star.connectedStars.Add (destination);
 					destination.connectedStars.Add (star);
 					starwayID++;
@@ -148,10 +148,9 @@ namespace starwayGen{
 								//Debug.Log ("Rect2");
 								if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
 									//Debug.Log ("Shorter.");
-									/*if (!StarwayCollision.Contains (line2)) {
+									if (!StarwayCollision.Contains (line2)) {
 										StarwayCollision.Add (line2);
-									}*/
-									sector.starwayList.Remove (line2);
+									}
 								} else {
 									//Debug.Log ("Stop");
 
@@ -200,10 +199,9 @@ namespace starwayGen{
 										//Debug.Log ("Rect2");
 										if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
 											//Debug.Log ("Shorter.");
-											/*if (!StarwayCollision.Contains (line2)) {
+											if (!StarwayCollision.Contains (line2)) {
 												StarwayCollision.Add (line2);
-											}*/
-											sector.starwayList.Remove (line2);
+											}
 										} else {
 											//Debug.Log ("Stop");
 
@@ -217,6 +215,9 @@ namespace starwayGen{
 					}
 				}
 			}
+
+			VogonConstructionFleet (1, sector);
+			StarwayCollision.Clear ();
 
 			Profiler.EndSample ();
 			return false;
@@ -266,7 +267,25 @@ namespace starwayGen{
 
 			if (operation == 1) { //Rensar lägre stående starways.
 				foreach (Starway index in StarwayCollision) {
-					sector.starwayList.Remove (index);
+
+					Object.DestroyImmediate (index.gameObject);
+
+					index.StarStart.connectedStars.Remove(index.StarEnd);
+					index.StarEnd.connectedStars.Remove(index.StarStart);
+
+					Debug.Log (sector.X + " : " + sector.Y);
+
+					Sector tmp = sector.Galaxy.GetSectorFromPos (index.Start);
+
+					Debug.Log (tmp);
+
+					//if (tmp != null) {
+						tmp.starwayList.Remove (index);
+					//}
+					tmp = sector.Galaxy.GetSectorFromPos (index.End);
+					//if (tmp != null) {
+						tmp.starwayList.Remove (index);
+					//}
 
 				}
 
