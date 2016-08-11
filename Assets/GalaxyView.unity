@@ -227,8 +227,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 2014037807}
   - 114: {fileID: 2014037806}
+  - 114: {fileID: 2014037808}
   m_Layer: 0
-  m_Name: MouseController
+  m_Name: InputController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,3 +259,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+--- !u!114 &2014037808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2014037805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c628ea0252392244baaeba55b146edbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

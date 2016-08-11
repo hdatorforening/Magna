@@ -4,7 +4,6 @@ using System.Collections;
 namespace keyLayout{
 	public static class KeyLayout {
 
-
 		//Camera Movement
 		public static string cameraMoveUp = "w";
 		public static string cameraMoveDown = "s";
@@ -15,6 +14,8 @@ namespace keyLayout{
 		public static string cameraMoveDown2 = "down";
 		public static string cameraMoveRight2 = "right";
 		public static string cameraMoveLeft2 = "left";
+
+
 
 	}
 }

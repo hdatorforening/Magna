@@ -9,10 +9,10 @@ public class KeyboardController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//Camera control
+
 		if (Input.anyKey) {
 
-			//WASD
+			//Camera control
 			if (Input.GetKey(keyLayout.KeyLayout.cameraMoveUp)){
 				Camera.main.transform.Translate ( 
 					new Vector3(0, +1, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
@@ -33,7 +33,7 @@ public class KeyboardController : MonoBehaviour {
 					new Vector3(-1, 0, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
 			}
 
-			//Arrow keys
+			//Camera control - Alternative
 			if (Input.GetKey(keyLayout.KeyLayout.cameraMoveUp2)){
 				Camera.main.transform.Translate ( 
 					new Vector3(0, +1, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );

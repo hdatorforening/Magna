@@ -49,9 +49,12 @@ public class GameController : MonoBehaviour {
 				DrawStar (star);
 			}
 		}
+			
 
-		foreach (Starway line in galaxy.starwayList) {
-			DrawStarway (line);
+		foreach (Sector sector in galaxy.sectorList) {
+			foreach (Starway starway in sector.starwayList) {
+				DrawStarway (starway);
+			}
 		}
 			
 	}

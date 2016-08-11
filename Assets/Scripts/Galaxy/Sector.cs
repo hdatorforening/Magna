@@ -5,12 +5,14 @@ using System.Collections.Generic;
 
 using gameSettings;
 using Funktioner;
+using starwayGen;
 
 public class Sector {
 
 	//GameSettings gameSettings;
 
 	Galaxy galaxy;
+	public Galaxy Galaxy { get { return galaxy;} }
 
 	int x;
 	public int X { get { return x;} }
@@ -40,6 +42,7 @@ public class Sector {
 
 
 	public List<Star> starList = new List<Star>();
+	public List<Starway> starwayList = new List<Starway> ();
 
 	public Sector (int x, int y, Galaxy galaxy) {
 
@@ -161,6 +164,9 @@ public class Sector {
 			}
 
 		}
+
+		starwayGen.StarwayGen.GenerateStarways (this);
+
 		Profiler.EndSample ();
 		return false;
 	}

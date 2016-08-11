@@ -10,7 +10,6 @@ public class Galaxy {
 	//GameSettings gameSettings = new GameSettings();
 
 	//StarPlacementScript starPlacementScript = new StarPlacementScript();
-	StarwayGen starwayGen = new StarwayGen ();
 
 	public List<Sector> sectorList = new List<Sector> (); //List att existing secotrs
 	//public List<Star> starList = new List<Star>(); //List of all existing stars
@@ -23,12 +22,13 @@ public class Galaxy {
 			for (int y = -5; y < 6; y++) {
 				GetSector(x,y);
 			}
-			
 		}
 
-
-
-		starwayGen.GenerateStarways (this);
+		foreach (Star star in GetSector(0,0).starList) {
+			if(star.position == new Vector3()){
+				Debug.Log("Starcount = "+star.connectedStars.Count);
+			}
+		}
 	}
 
 	Sector GetSector(int x, int y){
