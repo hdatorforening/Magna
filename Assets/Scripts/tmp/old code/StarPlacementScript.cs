@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿/*
+
+using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +14,8 @@ public class StarPlacementScript {
 	int starCurrent;
 	float maxStarDistance;
 	float minStarDistance;
+
+	Vector3 sectorOffset;
 
 	//WorldGenScript worldGenScript;
 	GameController gameController;
@@ -39,6 +43,7 @@ public class StarPlacementScript {
 		if (galaxy.starList.Count == 0) {
 			starStream [0] = startLoc;
 			AddStarToList (startLoc, starCurrent);
+			galaxy.origoGenerated = true;
 			starCurrent++;
 		}
 
@@ -68,6 +73,10 @@ public class StarPlacementScript {
 		maxStarDistance = gameSettings.maxStarDistance;
 		minStarDistance = gameSettings.minStarDistance;
 
+
+
+		Vector3 sectorPos;
+
 		if (parentID < 0) {
 			parentID = 0;
 		}
@@ -79,6 +88,8 @@ public class StarPlacementScript {
 				pos = pos + starStream [parentID];
 				//if (systemPlacementDebug) { Debug.Log (parentID); }
 
+
+				//Gammal stjärnplacering
 				for (int n = 0; n < starCurrent; n++) {
 					if (Vector3.Distance (starStream[n], pos) <= minStarDistance) {
 						failed = true;
@@ -104,3 +115,4 @@ public class StarPlacementScript {
 
 }
 
+*/

@@ -1,7 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using gameSettings;
+
 public class GameController : MonoBehaviour {
+
+	//float time = 0;
+	float num;
+	Sector tmpsect;
+
+	//void Update(){
+
+		/*time += Time.deltaTime;
+		if (time > 10f) {
+			time = 0;
+
+			foreach (Sector sector in galaxy.sectorList) {
+				sector.starList.Clear ();
+				sector.GenerateSector (10);
+			}
+
+			foreach (Sector sector in galaxy.sectorList) {
+				foreach (Star star in sector.starList) {
+					DrawStar (star);
+				}
+				tmpsect = sector;
+			}
+				
+		}*/
+	//}
 
 	GameObject dummyStar;
 	GameObject dummyStarway;
@@ -11,28 +38,30 @@ public class GameController : MonoBehaviour {
 
 	Galaxy galaxy;
 
-	GameSettings gameSettings = new GameSettings();
-
 	// Use this for initialization
 	void Start () {
 		Setup ();
 
-		galaxy = new Galaxy (gameSettings.numberOfStars);
+		galaxy = new Galaxy ();
 
-		Debug.Log (galaxy.starList.Count);
-
-		foreach (Star star in galaxy.starList) {
-			DrawStar (star);
+		foreach (Sector sector in galaxy.sectorList) {
+			//print (sector.Position + " | " + sector.X +", "+ sector.Y);
+			foreach (Star star in sector.starList) {
+				DrawStar (star);
+			}
 		}
+			
 
-		foreach (Starway line in galaxy.starwayList) {
-			DrawStarway (line);
+		foreach (Sector sector in galaxy.sectorList) {
+			foreach (Starway starway in sector.starwayList) {
+				DrawStarway (starway);
+			}
 		}
 			
 	}
 
 	void Setup(){
-		Camera.main.orthographicSize = gameSettings.worldSize;
+		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
 
 		dummyStar = new GameObject ("Stars");
 		dummyStar.transform.position = new Vector3 ();
@@ -45,17 +74,28 @@ public class GameController : MonoBehaviour {
 	}
 
 	void DrawStar(Star star){
+		Profiler.BeginSample ("DrawStar()");
+
 		GameObject star_go = new GameObject ();
-		star_go.name = "Star_" +star.id;
+		star_go.name = "Star";
 		star_go.transform.position = star.position;
-		star_go.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
+
+		star_go.transform.localScale = new Vector3 (
+			GameSettings.starSize, 
+			GameSettings.starSize, 
+			GameSettings.starSize
+		);
+
 		star_go.transform.SetParent (dummyStar.transform, true);
 
 		SpriteRenderer star_sr = star_go.AddComponent<SpriteRenderer> ();
 		star_sr.sprite = starSprite;
+		//Destroy (star_go, Time.deltaTime);
+		Profiler.EndSample ();
 	}
 		
 	void DrawStarway (Starway line){
+		Profiler.BeginSample ("DrawStarway()");
 		
 		Vector3 start = line.Start;
 		Vector3 end = line.End;
@@ -75,6 +115,10 @@ public class GameController : MonoBehaviour {
 		newLine.useWorldSpace = true;
 		newLine.SetColors (Color.white, Color.white);
 		newLine.material = whiteStarway;
+
+		line.gameObject = lineObj;
+
+		Profiler.EndSample ();
 	}
 
 }

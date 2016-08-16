@@ -4,91 +4,160 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StarwayGen {
-
-	Galaxy galaxy;
-	Starway starway;
-	int starwayID;
-
-	public List<int> StarwayCollision = new List<int>(); //List of collisions with active starway
+using gameSettings;
+using Funktioner;
 
 
-	public void GenerateStarways (Galaxy galaxy ,int starwayLenght){
+namespace starwayGen{
+	public static class StarwayGen {
 
-		//Setup
-		this.galaxy = galaxy;
-		starwayID = galaxy.starwayList.Count;
+		static int starwayID;
+		static Sector.directions dir;
 
-		//LineRenderer [] newStarway = new LineRenderer[];
-		//LineRenderer newStarway = new LineRenderer;
-		bool alreadyGenerated;
+		static public List<Starway> StarwayCollision = new List<Starway>(); //List of collisions with active starway
 
-		Vector3 lineStart, lineEnd;
 
-		foreach(Star star in galaxy.starList){
-			foreach (Star destination in galaxy.starList){
-				star.starwayGen = true;
-				alreadyGenerated = destination.starwayGen;
+		public static void GenerateStarways (Sector sector){
+			Profiler.BeginSample ("GenerateStarways()");
 
-				if ((star != destination) && !alreadyGenerated && (Vector2.Distance(star.position, destination.position)) < starwayLenght ) {
-					lineStart = star.position;
-					lineEnd = destination.position;
+			//starwayID = sector.starwayList.Count;
 
-					if (!CheckStarwayCollision (lineStart, lineEnd)) {
-						galaxy.starwayList.Add (starway = new Starway ( starwayID, lineStart, lineEnd));
-						starwayID++;
-					} else {
+			//LineRenderer [] newStarway = new LineRenderer[];
+			//LineRenderer newStarway = new LineRenderer;
+
+
+			//foreach(Sector sector in galaxy.sectorList){
+			foreach (Star star in sector.starList){
+				//star.starwayGen = true;
+
+				//Alla stjärnor i samma sektor
+				foreach (Star destination in sector.starList) {
+					if (star != destination) {
+						StarwayCalculator (star, destination, sector);
+					}
+				}
+
+				//Debug.Log (sector.neighbours [0]);
+
+				for (int i = 0; i < 8; i++) {
+
+					sector.CheckNeighbours (i);
+
+					int count = 0;
+					if (sector.neighbours [i] != null) {
+						foreach (Star destination in sector.neighbours[i].starList) {
+						StarwayCalculator (star, destination, sector);
+							count++;
+							if (count > 1000) {
+								Debug.LogError ("Game stuck in StarwayGen loop");
+								break;
+							}
+						}
+					}
+
+				}
+			}
+			//}
+
+			//VogonConstructionFleet (1, sector); //Ränsar ovälkomna starways.
+			//StarwayCollision.Clear();
+
+			Profiler.EndSample ();
+		}
+
+
+		static void StarwayCalculator(Star star, Star destination, Sector sector){
+			Profiler.BeginSample ("StarwayCalculator()");
+
+			Vector3 lineStart, lineEnd;
+			bool alreadyGenerated = false;
+			foreach (Star starConnected in star.connectedStars) {
+				if (starConnected == destination) {
+					alreadyGenerated = true;
+				}
+			}
+
+			if ((star != destination) && !alreadyGenerated && (Vector2.Distance (star.position, destination.position)) < GameSettings.starwayLenght) {
+				lineStart = star.position;
+				lineEnd = destination.position;
+
+				if (!CheckStarwayCollision (lineStart, lineEnd, sector)) {
+					sector.starwayList.Add (new Starway (starwayID, lineStart, lineEnd, star, destination));
+					star.connectedStars.Add (destination);
+					destination.connectedStars.Add (star);
+					starwayID++;
+				} else {
+
+				}
+			}
+
+			Profiler.EndSample ();
+		}
+
+
+		static bool CheckStarwayCollision(Vector3 start, Vector3 end, Sector sector){
+			Profiler.BeginSample ("CheckStarwayCollision()");
+
+			Vector3 ps1, pe1;
+
+			float A1, B1, C1; //Line1 calculations
+
+			ps1 = start;
+			pe1 = end;
+
+			// Get A,B,C of first line - points : ps1 to pe1
+			A1 = pe1.y-ps1.y;
+			B1 = ps1.x-pe1.x;
+			C1 = A1*ps1.x+B1*ps1.y;
+
+			//Debug.Log ("\n New Line");
+
+			foreach (Starway line2 in sector.starwayList) {
+
+				if (CheckCollision (start, end, line2, A1, B1, C1)) {
+					Profiler.EndSample ();
+					return true;
+				}
+
+			}
+
+			for (int i = 0; i < 8; i++) {
+				if (sector.CheckNeighbours(i) != null) {
+					foreach (Starway line2 in sector.neighbours[i].starwayList) {
+
+						if (CheckCollision (start, end, line2, A1, B1, C1)) {
+							Profiler.EndSample ();
+							return true;
+						}
 
 					}
 				}
 			}
+
+			VogonConstructionFleet (1, sector);
+			StarwayCollision.Clear ();
+
+			Profiler.EndSample ();
+			return false;
 		}
 
-		StarwayCollision.Sort ();
-		StarwayCollision.Reverse ();
-		VogonConstructionFleet (1); //Ränsar ovälkomna starways.
-		StarwayCollision.Clear();
 
-
-	}
-
-
-	bool CheckStarwayCollision(Vector3 start, Vector3 end){
-		Vector3 ps1, pe1, ps2, pe2;
-
-		int itemNumber = 0;
-
-		float A1, B1, C1; //Line1 calculations
-
-		float A2, B2, C2; //Line2 calculations
-
-		ps1 = start;
-		pe1 = end;
-
-		// Get A,B,C of first line - points : ps1 to pe1
-		A1 = pe1.y-ps1.y;
-		B1 = ps1.x-pe1.x;
-		C1 = A1*ps1.x+B1*ps1.y;
-
-		//Debug.Log ("\n New Line");
-
-		foreach (Starway line2 in galaxy.starwayList) {
-
-			ps2 = line2.Start;
-			pe2 = line2.End;
+		static bool CheckCollision(Vector3 start, Vector3 end, Starway line2, float A1, float B1, float C1){
+			Vector3 ps2 = line2.Start;
+			Vector3 pe2 = line2.End;
 
 			//Debug.Log (ps2 + " " + pe2);
 
 			// Get A,B,C of second line - points : ps2 to pe2
-			A2 = pe2.y-ps2.y;
-			B2 = ps2.x-pe2.x;
-			C2 = A2*ps2.x+B2*ps2.y;
+			float A2 = pe2.y - ps2.y;
+			float B2 = ps2.x - pe2.x;
+			float C2 = A2 * ps2.x + B2 * ps2.y;
 
 			//Debug.Log(A1 +" "+ B1 +" "+ C1 +" | "+ A2 +" "+ B2 +" "+ C2);
 			//Debug.Log ("1:Start:"+start+" End:"+end);
 
 			// Get delta and check if the lines are parallel
-			float delta = A1*B2 - A2*B1;
+			float delta = A1 * B2 - A2 * B1;
 			if (delta != 0) {
 				// now return the Vector2 intersection point
 				Vector3 intersection; 
@@ -97,82 +166,111 @@ public class StarwayGen {
 				intersection.z = 0;
 
 
-				if ( !(intersection == start || intersection == end) ) {
+				if (!(intersection == start || intersection == end)) {
 					//Debug.Log ("Intersection? \n P1 "+ps1+", "+pe1+" : P2 "+ps2+ ", "+pe2);
 
-					if (notRect (ps1, pe1, intersection)) {
+					if (NotRect.notRect (start, end, intersection)) {
 						//Debug.Log ("Rect1");
-						if (notRect (ps2, pe2, intersection)) {
+						if (NotRect.notRect (ps2, pe2, intersection)) {
 							//Debug.Log ("Rect2");
-							if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
+							if (Vector3.Distance (start, end) < Vector3.Distance (ps2, pe2)) {
 								//Debug.Log ("Shorter.");
-								if (!StarwayCollision.Contains (itemNumber)) {
-									StarwayCollision.Add (itemNumber);
+								if (!StarwayCollision.Contains (line2)) {
+									StarwayCollision.Add (line2);
 								}
 							} else {
 								//Debug.Log ("Stop");
+
 								return true;
 							}
 						}
 					}
 				}
 			}
-			itemNumber++;
+			return false;
 		}
 
-		return false;
-	}
 
+		/*
+		bool notRect(Vector3 p1, Vector3 p2, Vector3 intersect){
+			bool sect = false;
 
-	bool notRect(Vector3 p1, Vector3 p2, Vector3 intersect){
-		bool sect = false;
+			float rectOffset = 0;
 
-		float rectOffset = 0;
-
-		if(p1.x < p2.x){
-			if (((p1.x + rectOffset) < intersect.x) && (intersect.x < (p2.x - rectOffset))){
-				sect = true;
-				//Debug.Log ("NotRect.x.if");
+			if(p1.x < p2.x){
+				if (((p1.x + rectOffset) < intersect.x) && (intersect.x < (p2.x - rectOffset))){
+					sect = true;
+					//Debug.Log ("NotRect.x.if");
+				}
+			}else{
+				if (((p2.x + rectOffset) < intersect.x) && (intersect.x < (p1.x - rectOffset))){
+					sect = true;
+					//Debug.Log ("NotRect.x.else");
+				}
 			}
-		}else{
-			if (((p2.x + rectOffset) < intersect.x) && (intersect.x < (p1.x - rectOffset))){
-				sect = true;
-				//Debug.Log ("NotRect.x.else");
+
+			if (sect) {
+				if (p1.y < p2.y) {
+					if (((p1.y + rectOffset) < intersect.y) && (intersect.y < (p2.y - rectOffset))) {
+						//Debug.Log ("NotRect.y.if");
+						return true;
+					}
+				} else {
+					if (((p2.y + rectOffset) < intersect.y) && (intersect.y < (p1.y - rectOffset))) {
+						//Debug.Log ("NotRect.y.else");
+						return true;
+					}
+				}
 			}
+			//Debug.Log ("NotRect.False");
+			return false;
+
 		}
+		*/
 
-		if (sect) {
-			if (p1.y < p2.y) {
-				if (((p1.y + rectOffset) < intersect.y) && (intersect.y < (p2.y - rectOffset))) {
-					//Debug.Log ("NotRect.y.if");
-					return true;
+
+		static void VogonConstructionFleet(int operation, Sector sector){
+			Profiler.BeginSample ("VogonConstructionFleet()");
+
+			if (operation == 1) { //Rensar lägre stående starways.
+				foreach (Starway index in StarwayCollision) {
+
+					Object.DestroyImmediate (index.gameObject);
+
+					index.StarStart.connectedStars.Remove(index.StarEnd);
+					index.StarEnd.connectedStars.Remove(index.StarStart);
+
+					//Debug.Log ("Destroy in: " + sector.X + " : " + sector.Y);
+
+					Sector tmp = sector.Galaxy.GetSectorFromPos (index.Start);
+					if (tmp != null) {
+						tmp.starwayList.Remove (index);
+					} else {
+						//Debug.Log ("Tmp.start = NULL");
+					}
+
+					tmp = sector.Galaxy.GetSectorFromPos (index.End);
+					if (tmp != null) {
+						tmp.starwayList.Remove (index);
+					}else{
+						//Debug.Log("Tmp.end = NULL");
+					}
+
 				}
-			} else {
-				if (((p2.y + rectOffset) < intersect.y) && (intersect.y < (p1.y - rectOffset))) {
-					//Debug.Log ("NotRect.y.else");
-					return true;
+
+			} 
+
+			/*else if (operation == 2) { //Skjuter vilt med dekonstuktionslaser.
+				int i;
+				int u;
+				for (i = 0; i++; i < starwayList.Count() ) {
+					if (u = Random.value (0, 10) == 0) {
+						Random.value (0, starwayList.Count () - 1);
+					}
 				}
-			}
+			}*/
+
+			Profiler.EndSample ();
 		}
-		//Debug.Log ("NotRect.False");
-		return false;
-
-	}
-
-
-	void VogonConstructionFleet(int operation){
-		if (operation == 1) { //Rensar lägre stående starways.
-			foreach (int index in StarwayCollision) {
-				galaxy.starwayList.RemoveAt (index);
-			}
-		} /*else if (operation == 2) { //Skjuter vilt med dekonstuktionslaser.
-			int i;
-			int u;
-			for (i = 0; i++; i < starwayList.Count() ) {
-				if (u = Random.value (0, 10) == 0) {
-					Random.value (0, starwayList.Count () - 1);
-				}
-			}
-		}*/
 	}
 }

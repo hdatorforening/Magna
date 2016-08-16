@@ -9,7 +9,7 @@ public class Star {
 	public bool starwayGen = false;
 	public List<Star> connectedStars = new List<Star>(); //Alla stjärnor som denna stjärna har anslutning till.
 
-	Galaxy galaxy;
+	Sector sector; //TODO - Används inte, kanske bör tas bort.
 
 	int starID;
 	public int id { get { return starID;} }
@@ -17,8 +17,8 @@ public class Star {
 	Vector3 starPosition;
 	public Vector3 position { get { return starPosition;} }
 
-	public Star( Galaxy galaxy, Vector3 position, int id ){
-		this.galaxy = galaxy;
+	public Star( Sector sector, Vector3 position, int id ){
+		this.sector = sector;
 		this.starPosition = position;
 		this.starID = id;
 	}
