@@ -45,6 +45,7 @@ public class GameController : MonoBehaviour {
 		galaxy = new Galaxy ();
 
 		foreach (Sector sector in galaxy.sectorList) {
+			//print (sector.Position + " | " + sector.X +", "+ sector.Y);
 			foreach (Star star in sector.starList) {
 				DrawStar (star);
 			}
@@ -74,6 +75,7 @@ public class GameController : MonoBehaviour {
 
 	void DrawStar(Star star){
 		Profiler.BeginSample ("DrawStar()");
+
 		GameObject star_go = new GameObject ();
 		star_go.name = "Star";
 		star_go.transform.position = star.position;

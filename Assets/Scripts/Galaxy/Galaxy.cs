@@ -20,13 +20,16 @@ public class Galaxy {
 
 		for (int x = -3; x < 4; x++) {
 			for (int y = -3; y < 4; y++) {
-				GetSector(x,y);
+				GetSector (x, y);
 			}
 		}
 
+		//GetSector (0, 0);
+		//GetSector (1, 1);
+
 		foreach (Star star in GetSector(0,0).starList) {
 			if(star.position == new Vector3()){
-				Debug.Log("Starcount = "+star.connectedStars.Count);
+				//Debug.Log("Starcount = "+star.connectedStars.Count);
 			}
 		}
 	}
@@ -37,7 +40,6 @@ public class Galaxy {
 		}
 
 		Sector newSector = new Sector (x, y, this);
-		sectorList.Add (newSector);
 		return newSector;
 	}
 
@@ -45,11 +47,15 @@ public class Galaxy {
 		int x = Mathf.CeilToInt ((position.x - 5) / gameSettings.GameSettings.sectorSize);
 		int y =	Mathf.CeilToInt ((position.y - 5) / gameSettings.GameSettings.sectorSize);
 
-		Debug.Log ("Pos: " + position + ", X: " + x + ", Y: " + y);
+		//Debug.Log ("Count: " + sectorList.Count ());
+		//Debug.Log ("Pos: " + position + ", X: " + x + ", Y: " + y);
 
 		foreach (Sector sector in sectorList) {
+			//Debug.Log ("Sector: " + sector.X + ", " + sector.Y);
 			if (sector.X == x && sector.Y == y) { return sector; }
 		}
+
+		//Debug.Log ("Return NULL");
 
 		return null;
 	}

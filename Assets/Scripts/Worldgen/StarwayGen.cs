@@ -98,11 +98,9 @@ namespace starwayGen{
 		static bool CheckStarwayCollision(Vector3 start, Vector3 end, Sector sector){
 			Profiler.BeginSample ("CheckStarwayCollision()");
 
-			Vector3 ps1, pe1, ps2, pe2;
+			Vector3 ps1, pe1;
 
 			float A1, B1, C1; //Line1 calculations
-
-			float A2, B2, C2; //Line2 calculations
 
 			ps1 = start;
 			pe1 = end;
@@ -116,102 +114,22 @@ namespace starwayGen{
 
 			foreach (Starway line2 in sector.starwayList) {
 
-				ps2 = line2.Start;
-				pe2 = line2.End;
-
-				//Debug.Log (ps2 + " " + pe2);
-
-				// Get A,B,C of second line - points : ps2 to pe2
-				A2 = pe2.y-ps2.y;
-				B2 = ps2.x-pe2.x;
-				C2 = A2*ps2.x+B2*ps2.y;
-
-				//Debug.Log(A1 +" "+ B1 +" "+ C1 +" | "+ A2 +" "+ B2 +" "+ C2);
-				//Debug.Log ("1:Start:"+start+" End:"+end);
-
-				// Get delta and check if the lines are parallel
-				float delta = A1*B2 - A2*B1;
-				if (delta != 0) {
-					// now return the Vector2 intersection point
-					Vector3 intersection; 
-					intersection.x = (B2 * C1 - B1 * C2) / delta;
-					intersection.y = (A1 * C2 - A2 * C1) / delta;
-					intersection.z = 0;
-
-
-					if ( !(intersection == start || intersection == end) ) {
-						//Debug.Log ("Intersection? \n P1 "+ps1+", "+pe1+" : P2 "+ps2+ ", "+pe2);
-
-						if (NotRect.notRect (ps1, pe1, intersection)) {
-							//Debug.Log ("Rect1");
-							if (NotRect.notRect (ps2, pe2, intersection)) {
-								//Debug.Log ("Rect2");
-								if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
-									//Debug.Log ("Shorter.");
-									if (!StarwayCollision.Contains (line2)) {
-										StarwayCollision.Add (line2);
-									}
-								} else {
-									//Debug.Log ("Stop");
-
-									Profiler.EndSample ();
-									return true;
-								}
-							}
-						}
-					}
+				if (CheckCollision (start, end, line2, A1, B1, C1)) {
+					Profiler.EndSample ();
+					return true;
 				}
+
 			}
 
 			for (int i = 0; i < 8; i++) {
 				if (sector.CheckNeighbours(i) != null) {
 					foreach (Starway line2 in sector.neighbours[i].starwayList) {
 
-						ps2 = line2.Start;
-						pe2 = line2.End;
-
-						//Debug.Log (ps2 + " " + pe2);
-
-						// Get A,B,C of second line - points : ps2 to pe2
-						A2 = pe2.y - ps2.y;
-						B2 = ps2.x - pe2.x;
-						C2 = A2 * ps2.x + B2 * ps2.y;
-
-						//Debug.Log(A1 +" "+ B1 +" "+ C1 +" | "+ A2 +" "+ B2 +" "+ C2);
-						//Debug.Log ("1:Start:"+start+" End:"+end);
-
-						// Get delta and check if the lines are parallel
-						float delta = A1 * B2 - A2 * B1;
-						if (delta != 0) {
-							// now return the Vector2 intersection point
-							Vector3 intersection; 
-							intersection.x = (B2 * C1 - B1 * C2) / delta;
-							intersection.y = (A1 * C2 - A2 * C1) / delta;
-							intersection.z = 0;
-
-
-							if (!(intersection == start || intersection == end)) {
-								//Debug.Log ("Intersection? \n P1 "+ps1+", "+pe1+" : P2 "+ps2+ ", "+pe2);
-
-								if (NotRect.notRect (ps1, pe1, intersection)) {
-									//Debug.Log ("Rect1");
-									if (NotRect.notRect (ps2, pe2, intersection)) {
-										//Debug.Log ("Rect2");
-										if (Vector3.Distance (ps1, pe1) < Vector3.Distance (ps2, pe2)) {
-											//Debug.Log ("Shorter.");
-											if (!StarwayCollision.Contains (line2)) {
-												StarwayCollision.Add (line2);
-											}
-										} else {
-											//Debug.Log ("Stop");
-
-											Profiler.EndSample ();
-											return true;
-										}
-									}
-								}
-							}
+						if (CheckCollision (start, end, line2, A1, B1, C1)) {
+							Profiler.EndSample ();
+							return true;
 						}
+
 					}
 				}
 			}
@@ -220,6 +138,55 @@ namespace starwayGen{
 			StarwayCollision.Clear ();
 
 			Profiler.EndSample ();
+			return false;
+		}
+
+
+		static bool CheckCollision(Vector3 start, Vector3 end, Starway line2, float A1, float B1, float C1){
+			Vector3 ps2 = line2.Start;
+			Vector3 pe2 = line2.End;
+
+			//Debug.Log (ps2 + " " + pe2);
+
+			// Get A,B,C of second line - points : ps2 to pe2
+			float A2 = pe2.y - ps2.y;
+			float B2 = ps2.x - pe2.x;
+			float C2 = A2 * ps2.x + B2 * ps2.y;
+
+			//Debug.Log(A1 +" "+ B1 +" "+ C1 +" | "+ A2 +" "+ B2 +" "+ C2);
+			//Debug.Log ("1:Start:"+start+" End:"+end);
+
+			// Get delta and check if the lines are parallel
+			float delta = A1 * B2 - A2 * B1;
+			if (delta != 0) {
+				// now return the Vector2 intersection point
+				Vector3 intersection; 
+				intersection.x = (B2 * C1 - B1 * C2) / delta;
+				intersection.y = (A1 * C2 - A2 * C1) / delta;
+				intersection.z = 0;
+
+
+				if (!(intersection == start || intersection == end)) {
+					//Debug.Log ("Intersection? \n P1 "+ps1+", "+pe1+" : P2 "+ps2+ ", "+pe2);
+
+					if (NotRect.notRect (start, end, intersection)) {
+						//Debug.Log ("Rect1");
+						if (NotRect.notRect (ps2, pe2, intersection)) {
+							//Debug.Log ("Rect2");
+							if (Vector3.Distance (start, end) < Vector3.Distance (ps2, pe2)) {
+								//Debug.Log ("Shorter.");
+								if (!StarwayCollision.Contains (line2)) {
+									StarwayCollision.Add (line2);
+								}
+							} else {
+								//Debug.Log ("Stop");
+
+								return true;
+							}
+						}
+					}
+				}
+			}
 			return false;
 		}
 
@@ -273,19 +240,21 @@ namespace starwayGen{
 					index.StarStart.connectedStars.Remove(index.StarEnd);
 					index.StarEnd.connectedStars.Remove(index.StarStart);
 
-					Debug.Log (sector.X + " : " + sector.Y);
+					//Debug.Log ("Destroy in: " + sector.X + " : " + sector.Y);
 
 					Sector tmp = sector.Galaxy.GetSectorFromPos (index.Start);
-
-					Debug.Log (tmp);
-
-					//if (tmp != null) {
+					if (tmp != null) {
 						tmp.starwayList.Remove (index);
-					//}
+					} else {
+						//Debug.Log ("Tmp.start = NULL");
+					}
+
 					tmp = sector.Galaxy.GetSectorFromPos (index.End);
-					//if (tmp != null) {
+					if (tmp != null) {
 						tmp.starwayList.Remove (index);
-					//}
+					}else{
+						//Debug.Log("Tmp.end = NULL");
+					}
 
 				}
 
