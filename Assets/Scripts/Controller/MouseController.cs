@@ -5,19 +5,18 @@ using System.Collections.Generic;
 
 using gameSettings;
 
-public class MouseController : MonoBehaviour {
+public class MouseController : MonoBehaviour{
+
 
 	Vector3 currFramePosition;
 	Vector3 tmpFramePosition;
 	Vector3 lastFramePosition;
 
-
-	//GameSettings gameSettings = new GameSettings();
-
+	Galaxy galaxy; 
 
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -25,22 +24,21 @@ public class MouseController : MonoBehaviour {
 
 		currFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
+		//Flytta kameran
 		if (Input.GetMouseButton (1)) { //Right Mouse Button
-
 			Camera.main.transform.Translate (lastFramePosition - currFramePosition);
+		}
 
+
+		//Markera object
+		if (Input.GetMouseButtonDown (0)){
+			Interact ();
 		}
 
 
 		//Camera Zoom
-
 		if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
-			GameSettings.cameraSizeGalaxy -= Input.GetAxis ("Mouse ScrollWheel") * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
-			Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
-
-			tmpFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
-
-			Camera.main.transform.Translate (currFramePosition - tmpFramePosition);
+			Zoom ();
 		}
 
 
@@ -53,4 +51,26 @@ public class MouseController : MonoBehaviour {
 		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
 	}
+
+	void Zoom(){
+		GameSettings.cameraSizeGalaxy -= Input.GetAxis ("Mouse ScrollWheel") * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
+		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
+
+		tmpFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
+
+		Camera.main.transform.Translate (currFramePosition - tmpFramePosition);
+	}
+
+	void Interact(){
+
+		InteractGalaxy ();
+
+	}
+
+	void InteractGalaxy(){
+		Debug.Log (galaxy);
+		Sector sector = galaxy.GetSectorFromPos(currFramePosition);
+		Debug.Log (sector.X + " : " + sector.Y);
+	}
+
 }

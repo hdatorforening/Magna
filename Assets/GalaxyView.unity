@@ -226,8 +226,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2014037807}
-  - 114: {fileID: 2014037806}
   - 114: {fileID: 2014037808}
+  - 114: {fileID: 2014037806}
   m_Layer: 0
   m_Name: InputController
   m_TagString: Untagged
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2014037805}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 737ca00bc32b7ab4286acb0677b929c6, type: 3}
+  m_Script: {fileID: 11500000, guid: c628ea0252392244baaeba55b146edbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &2014037807
@@ -267,6 +267,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2014037805}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c628ea0252392244baaeba55b146edbb, type: 3}
+  m_Script: {fileID: 11500000, guid: 737ca00bc32b7ab4286acb0677b929c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

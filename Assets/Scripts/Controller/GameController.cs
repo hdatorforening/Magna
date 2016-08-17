@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 using gameSettings;
 
@@ -8,6 +10,7 @@ public class GameController : MonoBehaviour {
 	//float time = 0;
 	float num;
 	Sector tmpsect;
+
 
 	//void Update(){
 
@@ -36,13 +39,17 @@ public class GameController : MonoBehaviour {
 	//Sprites
 	public Sprite starSprite;
 
-	Galaxy galaxy;
+	public Galaxy galaxy;
+	public Galaxy Galaxy { get { return galaxy;} }
+
+	//public Galaxy Galaxy { get { return galaxy;} }
 
 	// Use this for initialization
 	void Start () {
 		Setup ();
 
 		galaxy = new Galaxy ();
+		//globalVariables.GlobalVariables = galaxy;
 
 		foreach (Sector sector in galaxy.sectorList) {
 			//print (sector.Position + " | " + sector.X +", "+ sector.Y);

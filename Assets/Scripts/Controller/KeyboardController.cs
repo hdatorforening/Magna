@@ -4,7 +4,7 @@ using System.Collections;
 using gameSettings;
 using keyLayout;
 
-public class KeyboardController : MonoBehaviour {
+public class KeyboardController : MonoBehaviour{
 
 	// Update is called once per frame
 	void Update () {
