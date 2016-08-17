@@ -7,7 +7,10 @@ using gameSettings;
 
 public class MouseController : MonoBehaviour {
 
+	Vector3 currFramePosition;
+	Vector3 tmpFramePosition;
 	Vector3 lastFramePosition;
+
 
 	//GameSettings gameSettings = new GameSettings();
 
@@ -20,7 +23,7 @@ public class MouseController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		Vector3 currFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
+		currFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
 		if (Input.GetMouseButton (1)) { //Right Mouse Button
 
@@ -28,17 +31,26 @@ public class MouseController : MonoBehaviour {
 
 		}
 
-		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
+
+		//Camera Zoom
+
+		if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
+			GameSettings.cameraSizeGalaxy -= Input.GetAxis ("Mouse ScrollWheel") * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
+			Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
+
+			tmpFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
+
+			Camera.main.transform.Translate (currFramePosition - tmpFramePosition);
+		}
 
 
-
-		GameSettings.cameraSizeGalaxy -= Input.GetAxis("Mouse ScrollWheel") * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
-		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
 
 		//Camera.main.transform.Translate ( Camera.main.ViewportToScreenPoint ( Input.mousePosition ) * Input.GetAxis("Mouse ScrollWheel") * GameSettings.scrollToMouseSpeed );
 		//Debug.Log (Camera.main.transform.position);
 		//Debug.Log (GameSettings.cameraSizeGalaxy);
 		//gameSettings.cameraDistance = Mathf.Clamp(gameSettings.cameraDistance, gameSettings.cameraDistanceMin, gameSettings.cameraDistanceMax);
+
+		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
 	}
 }
