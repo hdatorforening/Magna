@@ -64,7 +64,7 @@ public class MouseController : MonoBehaviour{
 	}
 
 	void InteractGalaxy(){
-		Profiler.BeginSample ("Interact()");
+		//Profiler.BeginSample ("Interact()");
 
 		Vector3 galaxyMousePos = currFramePosition;
 		galaxyMousePos.z = 0;
@@ -85,7 +85,7 @@ public class MouseController : MonoBehaviour{
 			galaxy.GetSector (x, y);
 		}
 
-		Profiler.EndSample();
+		//Profiler.EndSample();
 	}
 
 }

@@ -8,32 +8,10 @@ using globalVariables;
 
 public class GameController : MonoBehaviour {
 
-	//float time = 0;
-	float num;
-	Sector tmpsect;
+	Agent player;
 
 	MouseController mouseController;
 
-	//void Update(){
-
-		/*time += Time.deltaTime;
-		if (time > 10f) {
-			time = 0;
-
-			foreach (Sector sector in galaxy.sectorList) {
-				sector.starList.Clear ();
-				sector.GenerateSector (10);
-			}
-
-			foreach (Sector sector in galaxy.sectorList) {
-				foreach (Star star in sector.starList) {
-					DrawStar (star);
-				}
-				tmpsect = sector;
-			}
-				
-		}*/
-	//}
 
 	GameObject dummyStar;
 	GameObject dummyStarway;
@@ -53,6 +31,8 @@ public class GameController : MonoBehaviour {
 		galaxy = new Galaxy (this);
 		GlobalVariables.galaxy = galaxy;
 
+		player = new Agent ();
+
 		//globalVariables.GlobalVariables = galaxy;
 
 		/*foreach (Sector sector in galaxy.sectorList) {
@@ -63,11 +43,11 @@ public class GameController : MonoBehaviour {
 		}*/
 			
 
-		foreach (Sector sector in galaxy.sectorList) {
+		/*foreach (Sector sector in galaxy.sectorList) {
 			foreach (Starway starway in sector.starwayList) {
 				DrawStarway (starway);
 			}
-		}
+		}*/
 			
 	}
 

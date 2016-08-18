@@ -7,7 +7,11 @@ using System.Collections.Generic;
 namespace globalVariables{
 	public static class GlobalVariables{
 
+		static Agent player;
+		public static Agent Player { get { return player;} set { player = value;} }
+
 		public static Galaxy galaxy;
+
 
 	}
 }
