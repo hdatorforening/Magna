@@ -12,7 +12,6 @@ namespace starwayGen{
 	public static class StarwayGen {
 
 		static int starwayID;
-		static Sector.directions dir;
 
 		static public List<Starway> StarwayCollision = new List<Starway>(); //List of collisions with active starway
 

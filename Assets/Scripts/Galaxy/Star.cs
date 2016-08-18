@@ -17,10 +17,10 @@ public class Star {
 	Vector3 starPosition;
 	public Vector3 position { get { return starPosition;} }
 
-	public Star( Sector sector, Vector3 position, int id ){
+	public Star( Sector sector, Vector3 position){
 		this.sector = sector;
 		this.starPosition = position;
-		this.starID = id;
+		this.starID = sector.Galaxy.GetNewStarID();
 	}
 
 }

@@ -4,15 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 
 using gameSettings;
+using globalVariables;
 
 public class MouseController : MonoBehaviour{
+
+	bool mouseDebug = false;
 
 
 	Vector3 currFramePosition;
 	Vector3 tmpFramePosition;
 	Vector3 lastFramePosition;
 
-	Galaxy galaxy; 
+	Galaxy galaxy = GlobalVariables.galaxy; 
 
 	// Use this for initialization
 	void Start () {
@@ -41,13 +44,6 @@ public class MouseController : MonoBehaviour{
 			Zoom ();
 		}
 
-
-
-		//Camera.main.transform.Translate ( Camera.main.ViewportToScreenPoint ( Input.mousePosition ) * Input.GetAxis("Mouse ScrollWheel") * GameSettings.scrollToMouseSpeed );
-		//Debug.Log (Camera.main.transform.position);
-		//Debug.Log (GameSettings.cameraSizeGalaxy);
-		//gameSettings.cameraDistance = Mathf.Clamp(gameSettings.cameraDistance, gameSettings.cameraDistanceMin, gameSettings.cameraDistanceMax);
-
 		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
 	}
@@ -68,9 +64,28 @@ public class MouseController : MonoBehaviour{
 	}
 
 	void InteractGalaxy(){
-		Debug.Log (galaxy);
-		Sector sector = galaxy.GetSectorFromPos(currFramePosition);
-		Debug.Log (sector.X + " : " + sector.Y);
+		Profiler.BeginSample ("Interact()");
+
+		Vector3 galaxyMousePos = currFramePosition;
+		galaxyMousePos.z = 0;
+		Galaxy galaxy = GlobalVariables.galaxy; 
+		Sector sector = galaxy.GetSectorFromPos(galaxyMousePos);
+		//Debug.Log (sector.X + " : " + sector.Y);
+		if (sector != null) {
+			foreach (Star star in sector.starList) {
+				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
+					Debug.Log (sector);
+				}
+			}
+		}
+			
+		if (mouseDebug) {
+			int x = Mathf.CeilToInt ((galaxyMousePos.x - 5) / gameSettings.GameSettings.sectorSize);
+			int y =	Mathf.CeilToInt ((galaxyMousePos.y - 5) / gameSettings.GameSettings.sectorSize);
+			galaxy.GetSector (x, y);
+		}
+
+		Profiler.EndSample();
 	}
 
 }

@@ -7,16 +7,19 @@ using gameSettings;
 
 public class Galaxy {
 
+	public GameController gameController;
 	//GameSettings gameSettings = new GameSettings();
 
 	//StarPlacementScript starPlacementScript = new StarPlacementScript();
 
 	public List<Sector> sectorList = new List<Sector> (); //List att existing secotrs
-	//public List<Star> starList = new List<Star>(); //List of all existing stars
 	public List<Starway> starwayList = new List<Starway>(); //List of all existing starways
+	int starID = -1;
 
-	public Galaxy(){
+	public Galaxy(GameController gameController){
 		Debug.Log ("New Galaxy created");
+
+		this.gameController = gameController;
 
 		for (int x = -3; x < 4; x++) {
 			for (int y = -3; y < 4; y++) {
@@ -58,6 +61,12 @@ public class Galaxy {
 		//Debug.Log ("Return NULL");
 
 		return null;
+	}
+
+	//Retunerar den ID som en ny stjärna skall bli tilldelad.
+	public int GetNewStarID (){
+		starID++;
+		return starID;
 	}
 
 }

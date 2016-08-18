@@ -25,5 +25,9 @@ namespace gameSettings{
 		public static float scrollToMouseSpeed = 5f;
 
 		public static float KeyboardScrollSpeed = 0.04f;
+
+
+		//UI settings
+		public static float StarClickBox = 0.5f;
 	}
 }

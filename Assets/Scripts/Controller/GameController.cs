@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using gameSettings;
+using globalVariables;
 
 public class GameController : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class GameController : MonoBehaviour {
 	float num;
 	Sector tmpsect;
 
+	MouseController mouseController;
 
 	//void Update(){
 
@@ -48,15 +50,17 @@ public class GameController : MonoBehaviour {
 	void Start () {
 		Setup ();
 
-		galaxy = new Galaxy ();
+		galaxy = new Galaxy (this);
+		GlobalVariables.galaxy = galaxy;
+
 		//globalVariables.GlobalVariables = galaxy;
 
-		foreach (Sector sector in galaxy.sectorList) {
+		/*foreach (Sector sector in galaxy.sectorList) {
 			//print (sector.Position + " | " + sector.X +", "+ sector.Y);
 			foreach (Star star in sector.starList) {
 				DrawStar (star);
 			}
-		}
+		}*/
 			
 
 		foreach (Sector sector in galaxy.sectorList) {
@@ -80,8 +84,9 @@ public class GameController : MonoBehaviour {
 
 	}
 
-	void DrawStar(Star star){
+	public void DrawStar(Star star){
 		Profiler.BeginSample ("DrawStar()");
+
 
 		GameObject star_go = new GameObject ();
 		star_go.name = "Star";
@@ -101,7 +106,7 @@ public class GameController : MonoBehaviour {
 		Profiler.EndSample ();
 	}
 		
-	void DrawStarway (Starway line){
+	public void DrawStarway (Starway line){
 		Profiler.BeginSample ("DrawStarway()");
 		
 		Vector3 start = line.Start;

@@ -13,6 +13,7 @@ public class Sector {
 
 	Galaxy galaxy;
 	public Galaxy Galaxy { get { return galaxy;} }
+	GameController gameController;
 
 	int x;
 	public int X { get { return x;} }
@@ -22,24 +23,8 @@ public class Sector {
 
 	Vector3 position;
 	public Vector3 Position { get { return position;} }
-
-	public enum directions
-	{
-		north, ne, east, se, south, sw, west, nw 
-	};
-
-	public Sector[] neighbours = new Sector[8];
-
-	/*Sector north, south, east, west, ne, nw, se, sw;
-	public Sector North { get { return north;} set { north = value;} }
-	public Sector South { get { return south;} set { south = value;} }
-	public Sector East { get { return east;} set { east = value;} }
-	public Sector West { get { return west;} set { west = value;} }
-	public Sector Ne { get { return ne;} set { ne = value;} }
-	public Sector Nw { get { return nw;} set { nw = value;} }
-	public Sector Se { get { return se;} set { ne = value;} }
-	public Sector Sw { get { return sw;} set { nw = value;} }*/
-
+		
+	public Sector[] neighbours = new Sector[8]; // 0 = Norr
 
 	public List<Star> starList = new List<Star>();
 	public List<Starway> starwayList = new List<Starway> ();
@@ -50,6 +35,8 @@ public class Sector {
 		this.galaxy = galaxy;
 		galaxy.sectorList.Add (this);
 
+		this.gameController = galaxy.gameController;
+
 		float sectorSize = GameSettings.sectorSize;
 
 		this.x = x;
@@ -58,6 +45,14 @@ public class Sector {
 		this.position = new Vector3 (x * sectorSize, y * sectorSize, 0);
 
 		GenerateSector (Random.Range(2, 8) + Random.Range(2, 8) + Random.Range(2, 8));
+
+		foreach (Star star in starList) {
+			gameController.DrawStar (star);
+		}
+
+		foreach (Starway starway in starwayList) {
+			gameController.DrawStarway (starway);
+		}
 
 	}
 
@@ -72,7 +67,7 @@ public class Sector {
 
 		if (x == y && x == 0) {
 			//starStream [starCurrent] = new Vector3(0, 0, 0);
-			starList.Add (new Star (this, new Vector3(0f, 0f, 0), starCurrent));
+			starList.Add (new Star (this, new Vector3(0f, 0f, 0)));
 			//Debug.Log (starCurrent);
 			starCurrent++;
 		}
@@ -151,7 +146,8 @@ public class Sector {
 			if (!failed) {
 				
 				//starStream [starCurrent] = starPos;
-				starList.Add (new Star (this, starPos, starCurrent));
+				;
+				starList.Add (new Star (this, starPos));
 				//Debug.Log (starCurrent);
 				starCurrent++;
 				tries = 0;
