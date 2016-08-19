@@ -74,7 +74,7 @@ public class MouseController : MonoBehaviour{
 		if (sector != null) {
 			foreach (Star star in sector.starList) {
 				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
-					Debug.Log (sector);
+					
 				}
 			}
 		}
