@@ -16,6 +16,14 @@ namespace keyLayout{
 		public static string cameraMoveLeft2 = "left"; //left
 
 
+		//Interface
+		public static string exit = "escape"; //escape
+
+
+		//Extra
+		public static KeyCode ctrl = KeyCode.LeftControl; //ctrl
+		public static KeyCode alt = KeyCode.LeftAlt; //alt
+		public static KeyCode altGr = KeyCode.AltGr; //altgr
 
 	}
 }

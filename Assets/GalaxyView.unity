@@ -121,9 +121,9 @@ RectTransform:
   m_Father: {fileID: 697972924}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 324, y: -298.5}
-  m_SizeDelta: {x: 648, y: -599}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 319, y: 242}
+  m_SizeDelta: {x: 639, y: 483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &221795256
 MonoBehaviour:
@@ -334,6 +334,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bfac68792e6044cbf739a829342669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMenuPrefab: {fileID: 1000013777007834, guid: ec131d3e54f7fc541a080b2d2091b21e,
+    type: 2}
   starSprite: {fileID: 21300000, guid: 9469f8f1bf3234f4d8c0f0143cbc4400, type: 3}
 --- !u!1 &697972920
 GameObject:
@@ -347,7 +349,7 @@ GameObject:
   - 114: {fileID: 697972922}
   - 114: {fileID: 697972921}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: GalaxyUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -380,12 +382,12 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -463,8 +465,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 103, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 32.5, y: -20}
+  m_SizeDelta: {x: 42.4, y: 27.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1184849550
 MonoBehaviour:
@@ -573,8 +575,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 0, y: 61}
+  m_AnchoredPosition: {x: 0, y: -21}
+  m_SizeDelta: {x: 0, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1318117943
 MonoBehaviour:

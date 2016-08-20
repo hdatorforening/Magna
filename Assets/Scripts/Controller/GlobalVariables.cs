@@ -12,6 +12,8 @@ namespace globalVariables{
 
 		public static Galaxy galaxy;
 
+		static GameObject mainMenu;
+		public static GameObject MainMenu { get { return mainMenu;} set { mainMenu = value;} }
 
 	}
 }

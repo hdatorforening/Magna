@@ -16,6 +16,8 @@ public class GameController : MonoBehaviour {
 	GameObject dummyStar;
 	GameObject dummyStarway;
 
+	public GameObject mainMenuPrefab;
+
 	//Sprites
 	public Sprite starSprite;
 
@@ -52,16 +54,22 @@ public class GameController : MonoBehaviour {
 	}
 
 	void Setup(){
+		//Set the default camera zoom
 		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
-
+		
+		//Creates an object to place the stars under.
 		dummyStar = new GameObject ("Stars");
 		dummyStar.transform.position = new Vector3 ();
 		dummyStar.transform.SetParent (this.transform);
 
+		//Creates an object to place the starways under.
 		dummyStarway = new GameObject ("Starways");
 		dummyStarway.transform.position = new Vector3 ();
 		dummyStarway.transform.SetParent (this.transform);
 
+		//Creates and hides the main menu.
+		globalVariables.GlobalVariables.MainMenu = Instantiate (mainMenuPrefab);
+		globalVariables.GlobalVariables.MainMenu.SetActive (false);
 	}
 
 	public void DrawStar(Star star){

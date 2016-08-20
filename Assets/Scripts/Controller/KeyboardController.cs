@@ -12,7 +12,7 @@ public class KeyboardController : MonoBehaviour{
 
 		if (Input.anyKey) {
 
-			//Camera control
+			//Camera control ----------------------------------------------------------------------------------
 			if (Input.GetKey(keyLayout.KeyLayout.cameraMoveUp)){
 				Camera.main.transform.Translate ( 
 					new Vector3(0, +1, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
@@ -33,7 +33,7 @@ public class KeyboardController : MonoBehaviour{
 					new Vector3(-1, 0, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
 			}
 
-			//Camera control - Alternative
+			//Camera control - Alternative --------------------------------------------------------------------
 			if (Input.GetKey(keyLayout.KeyLayout.cameraMoveUp2)){
 				Camera.main.transform.Translate ( 
 					new Vector3(0, +1, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
@@ -53,8 +53,29 @@ public class KeyboardController : MonoBehaviour{
 				Camera.main.transform.Translate ( 
 					new Vector3(-1, 0, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
 			}
-				
 
+
+			//Interface ---------------------------------------------------------------------------------------
+			if (Input.GetKeyDown(keyLayout.KeyLayout.exit)){
+				globalVariables.GlobalVariables.MainMenu.SetActive( !globalVariables.GlobalVariables.MainMenu.activeSelf ? true : false );
+				Debug.Log ("Exit");
+			}
+
+
+			//Extra ------------------------------------
+			if (Input.GetKeyDown(keyLayout.KeyLayout.ctrl)){
+				Debug.Log ("Ctrl");
+			}
+			if (Input.GetKeyDown(keyLayout.KeyLayout.alt)){
+				Debug.Log ("Alt");
+			}
+			if (Input.GetKeyDown(keyLayout.KeyLayout.altGr)){
+				Debug.Log ("AltGr");
+			}
+
+			if (Input.anyKeyDown) {
+				Debug.Log (Input.anyKeyDown);
+			}
 		}
 
 	}
