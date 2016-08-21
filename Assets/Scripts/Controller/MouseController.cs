@@ -3,12 +3,15 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using UnityEngine.UI;
+
 using gameSettings;
 using globalVariables;
 
 public class MouseController : MonoBehaviour{
 
 	bool mouseDebug = false;
+	bool firstRun = true;
 
 	Sector hoverSector; //Sektorn musen är i.
 	Star hoverStar; //Stjärnan musen är över.
@@ -22,10 +25,11 @@ public class MouseController : MonoBehaviour{
 
 
 	Galaxy galaxy; 
+	Text text;
 
 	// Use this for initialization
 	void Start () {
-		
+		text = globalVariables.UI.ui.transform.GetChild (0).GetChild (0).GetChild(0).GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
@@ -44,15 +48,36 @@ public class MouseController : MonoBehaviour{
 			Camera.main.transform.Translate (lastFramePosition - currFramePosition);
 		}
 
-		HoverStar ();
-		if (selectedStar == null) {
-			globalVariables.UI.greenSelectCircle.transform.position = hoverStar.position;
-		}
 
+		if (hoverStar != null) {
+			if (Vector3.Distance (galaxyMousePos, hoverStar.position) > gameSettings.GameSettings.StarClickBox / 2) {
+				HoverStar ();
+				if (hoverStar != null) {
+					if (selectedStar == null) {
+						globalVariables.UI.greenSelectCircle.transform.position = hoverStar.position;
+
+						text.text = hoverStar.id.ToString ();
+						//globalVariables.UI.greenSelectCircle.SetActive (true);
+					}
+				} /*else {
+					globalVariables.UI.greenSelectCircle.SetActive (false);
+				}*/
+			}
+		} else {
+			HoverStar ();
+		}
 
 
 		//Markera object
 		if (Input.GetMouseButtonDown (0)){
+			if (hoverStar != null) {
+				selectedStar = hoverStar;
+			}
+
+			if (Vector3.Distance(galaxyMousePos, selectedStar.position) > gameSettings.GameSettings.StarClickBox) {
+				selectedStar = null;
+			}
+
 			Interact ();
 		}
 
@@ -103,7 +128,6 @@ public class MouseController : MonoBehaviour{
 			foreach (Star star in hoverSector.starList) {
 				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
 					hoverStar = star;
-					Debug.Log (hoverStar);
 				}
 			}
 		} else {

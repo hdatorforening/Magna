@@ -22,6 +22,7 @@ namespace globalVariables{
 	public static class UI{
 
 		public static GameObject greenSelectCircle;
+		public static GameObject ui;
 
 		static GameObject mainMenu;
 		public static GameObject MainMenu { get { return mainMenu;} set { mainMenu = value;} }

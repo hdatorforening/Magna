@@ -40,7 +40,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	void Setup(){
-		//Set the default camera zoom
+		//Setting the default settings.
+		globalVariables.UI.ui = dummyUI;
+
+		//Set the default camera zoom.
 		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
 		
 		//Creates an object to place the stars under.

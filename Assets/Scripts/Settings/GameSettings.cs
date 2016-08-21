@@ -27,6 +27,6 @@ namespace gameSettings{
 
 
 		//UI settings
-		public static float StarClickBox = 0.5f; //0.5f
+		public static float StarClickBox = 1f; //0.5f
 	}
 }
