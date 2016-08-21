@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour {
 
 	GameObject dummyStar;
 	GameObject dummyStarway;
+ 	public GameObject dummyUI;
 
 	public GameObject mainMenuPrefab;
 
@@ -34,22 +35,6 @@ public class GameController : MonoBehaviour {
 		GlobalVariables.galaxy = galaxy;
 
 		player = new Agent ();
-
-		//globalVariables.GlobalVariables = galaxy;
-
-		/*foreach (Sector sector in galaxy.sectorList) {
-			//print (sector.Position + " | " + sector.X +", "+ sector.Y);
-			foreach (Star star in sector.starList) {
-				DrawStar (star);
-			}
-		}*/
-			
-
-		/*foreach (Sector sector in galaxy.sectorList) {
-			foreach (Starway starway in sector.starwayList) {
-				DrawStarway (starway);
-			}
-		}*/
 			
 	}
 
@@ -68,8 +53,9 @@ public class GameController : MonoBehaviour {
 		dummyStarway.transform.SetParent (this.transform);
 
 		//Creates and hides the main menu.
-		globalVariables.GlobalVariables.MainMenu = Instantiate (mainMenuPrefab);
-		globalVariables.GlobalVariables.MainMenu.SetActive (false);
+		globalVariables.UI.MainMenu = Instantiate (mainMenuPrefab);
+		globalVariables.UI.MainMenu.SetActive (false);
+		globalVariables.UI.MainMenu.transform.SetParent (dummyUI.transform);
 	}
 
 	public void DrawStar(Star star){
@@ -77,7 +63,7 @@ public class GameController : MonoBehaviour {
 
 
 		GameObject star_go = new GameObject ();
-		star_go.name = "Star";
+		star_go.name = "Star_" + star.id;
 		star_go.transform.position = star.position;
 
 		star_go.transform.localScale = new Vector3 (

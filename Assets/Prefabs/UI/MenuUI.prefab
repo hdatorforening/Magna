@@ -39,6 +39,7 @@ GameObject:
   - 223: {fileID: 223000013937445482}
   - 114: {fileID: 114000010905962016}
   - 114: {fileID: 114000010016675398}
+  - 114: {fileID: 114000013840434058}
   m_Layer: 5
   m_Name: MenuUI
   m_TagString: Untagged
@@ -110,6 +111,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114000013840434058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013777007834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e9ca1dd8733ef45b4deb3230b54ebe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222000010712839562
 CanvasRenderer:
   m_ObjectHideFlags: 1

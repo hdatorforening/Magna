@@ -57,8 +57,7 @@ public class KeyboardController : MonoBehaviour{
 
 			//Interface ---------------------------------------------------------------------------------------
 			if (Input.GetKeyDown(keyLayout.KeyLayout.exit)){
-				globalVariables.GlobalVariables.MainMenu.SetActive( !globalVariables.GlobalVariables.MainMenu.activeSelf ? true : false );
-				Debug.Log ("Exit");
+				globalVariables.UI.MainMenu.SetActive( !globalVariables.UI.MainMenu.activeSelf ? true : false );
 			}
 
 
@@ -73,9 +72,6 @@ public class KeyboardController : MonoBehaviour{
 				Debug.Log ("AltGr");
 			}
 
-			if (Input.anyKeyDown) {
-				Debug.Log (Input.anyKeyDown);
-			}
 		}
 
 	}
