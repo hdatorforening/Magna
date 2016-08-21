@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour {
  	public GameObject dummyUI;
 
 	public GameObject mainMenuPrefab;
+	public GameObject greenSelectCirlce;
 
 	//Sprites
 	public Sprite starSprite;
@@ -56,6 +57,10 @@ public class GameController : MonoBehaviour {
 		globalVariables.UI.MainMenu = Instantiate (mainMenuPrefab);
 		globalVariables.UI.MainMenu.SetActive (false);
 		globalVariables.UI.MainMenu.transform.SetParent (dummyUI.transform);
+
+		//Setup the basic prefabs
+		globalVariables.UI.greenSelectCircle = (GameObject)Instantiate(greenSelectCirlce, new Vector3(0, 0, 0), Quaternion.identity);
+		globalVariables.UI.greenSelectCircle.transform.SetParent (dummyUI.transform);
 	}
 
 	public void DrawStar(Star star){

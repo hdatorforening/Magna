@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 
 namespace globalVariables{
+
+	public static class prefabs{
+		//public static GameObject greenSelectCircleGo;
+	}
+
 	public static class GlobalVariables{
 
 		static Agent player;
@@ -15,6 +20,8 @@ namespace globalVariables{
 	}
 
 	public static class UI{
+
+		public static GameObject greenSelectCircle;
 
 		static GameObject mainMenu;
 		public static GameObject MainMenu { get { return mainMenu;} set { mainMenu = value;} }

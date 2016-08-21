@@ -337,6 +337,8 @@ MonoBehaviour:
   dummyUI: {fileID: 781845938}
   mainMenuPrefab: {fileID: 1000013777007834, guid: ec131d3e54f7fc541a080b2d2091b21e,
     type: 2}
+  greenSelectCirlce: {fileID: 1000012475277926, guid: ac9d50ee6765a654cbfb12d38c65c7f1,
+    type: 2}
   starSprite: {fileID: 21300000, guid: 9469f8f1bf3234f4d8c0f0143cbc4400, type: 3}
 --- !u!1 &697972920
 GameObject:

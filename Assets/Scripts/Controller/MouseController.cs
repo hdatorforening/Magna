@@ -10,12 +10,18 @@ public class MouseController : MonoBehaviour{
 
 	bool mouseDebug = false;
 
+	Sector hoverSector; //Sektorn musen är i.
+	Star hoverStar; //Stjärnan musen är över.
+	Star selectedStar = null;
 
 	Vector3 currFramePosition;
-	Vector3 tmpFramePosition;
+	Vector3 tmpFramePosition; //Used for zoom to mouse.
 	Vector3 lastFramePosition;
 
-	Galaxy galaxy = GlobalVariables.galaxy; 
+	Vector3 galaxyMousePos;
+
+
+	Galaxy galaxy; 
 
 	// Use this for initialization
 	void Start () {
@@ -24,13 +30,25 @@ public class MouseController : MonoBehaviour{
 	
 	// Update is called once per frame
 	void Update () {
+		Profiler.BeginSample ("MouseController:Update()");
+
+		galaxy = globalVariables.GlobalVariables.galaxy; 
 
 		currFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
+
+		galaxyMousePos = currFramePosition;
+		galaxyMousePos.z = 0;
 
 		//Flytta kameran
 		if (Input.GetMouseButton (1)) { //Right Mouse Button
 			Camera.main.transform.Translate (lastFramePosition - currFramePosition);
 		}
+
+		HoverStar ();
+		if (selectedStar == null) {
+			globalVariables.UI.greenSelectCircle.transform.position = hoverStar.position;
+		}
+
 
 
 		//Markera object
@@ -46,6 +64,7 @@ public class MouseController : MonoBehaviour{
 
 		lastFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
+		Profiler.EndSample ();
 	}
 
 	void Zoom(){
@@ -66,19 +85,7 @@ public class MouseController : MonoBehaviour{
 	void InteractGalaxy(){
 		//Profiler.BeginSample ("Interact()");
 
-		Vector3 galaxyMousePos = currFramePosition;
-		galaxyMousePos.z = 0;
-		Galaxy galaxy = GlobalVariables.galaxy; 
-		Sector sector = galaxy.GetSectorFromPos(galaxyMousePos);
-		//Debug.Log (sector.X + " : " + sector.Y);
-		if (sector != null) {
-			foreach (Star star in sector.starList) {
-				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
-					
-				}
-			}
-		}
-			
+
 		if (mouseDebug) {
 			int x = Mathf.CeilToInt ((galaxyMousePos.x - 5) / gameSettings.GameSettings.sectorSize);
 			int y =	Mathf.CeilToInt ((galaxyMousePos.y - 5) / gameSettings.GameSettings.sectorSize);
@@ -86,6 +93,22 @@ public class MouseController : MonoBehaviour{
 		}
 
 		//Profiler.EndSample();
+	}
+
+	void HoverStar(){
+		
+		hoverSector = galaxy.GetSectorFromPos (galaxyMousePos);
+
+		if (hoverSector != null) {
+			foreach (Star star in hoverSector.starList) {
+				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
+					hoverStar = star;
+					Debug.Log (hoverStar);
+				}
+			}
+		} else {
+			hoverStar = null;
+		}
 	}
 
 }
