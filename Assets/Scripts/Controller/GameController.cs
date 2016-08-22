@@ -10,13 +10,17 @@ public class GameController : MonoBehaviour {
 
 	Agent player;
 
+	//Scripts.
+	StarController starController;
 	MouseController mouseController;
+	//StarController starController;
 
-
+	//Dummy objects
 	GameObject dummyStar;
 	GameObject dummyStarway;
  	public GameObject dummyUI;
 
+	//Prefabs
 	public GameObject mainMenuPrefab;
 	public GameObject greenSelectCirlce;
 
@@ -69,21 +73,26 @@ public class GameController : MonoBehaviour {
 	public void DrawStar(Star star){
 		Profiler.BeginSample ("DrawStar()");
 
+		star.go = new GameObject ();
+		star.go.AddComponent<StarController> ();
 
-		GameObject star_go = new GameObject ();
-		star_go.name = "Star_" + star.id;
-		star_go.transform.position = star.position;
+		star.go.name = "Star_" + star.id;
+		star.go.transform.position = star.position;
 
-		star_go.transform.localScale = new Vector3 (
+		star.go.transform.localScale = new Vector3 (
 			GameSettings.starSize, 
 			GameSettings.starSize, 
 			GameSettings.starSize
 		);
 
-		star_go.transform.SetParent (dummyStar.transform, true);
+		star.go.transform.SetParent (dummyStar.transform, true);
 
-		SpriteRenderer star_sr = star_go.AddComponent<SpriteRenderer> ();
+		SpriteRenderer star_sr = star.go.AddComponent<SpriteRenderer> ();
 		star_sr.sprite = starSprite;
+		//StarController star_control = 
+
+
+
 		//Destroy (star_go, Time.deltaTime);
 		Profiler.EndSample ();
 	}

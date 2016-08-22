@@ -17,6 +17,8 @@ public class Star {
 	Vector3 starPosition;
 	public Vector3 position { get { return starPosition;} }
 
+	public GameObject go;
+
 	public Star( Sector sector, Vector3 position){
 		this.sector = sector;
 		this.starPosition = position;

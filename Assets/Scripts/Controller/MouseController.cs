@@ -49,7 +49,7 @@ public class MouseController : MonoBehaviour{
 		}
 
 
-		if (hoverStar != null) {
+		/*if (hoverStar != null) {
 			if (Vector3.Distance (galaxyMousePos, hoverStar.position) > gameSettings.GameSettings.StarClickBox / 2) {
 				HoverStar ();
 				if (hoverStar != null) {
@@ -57,16 +57,16 @@ public class MouseController : MonoBehaviour{
 						globalVariables.UI.greenSelectCircle.transform.position = hoverStar.position;
 
 						text.text = hoverStar.id.ToString ();
-						//globalVariables.UI.greenSelectCircle.SetActive (true);
+						globalVariables.UI.greenSelectCircle.SetActive (true);
 					}
-				} else {
-					//globalVariables.UI.greenSelectCircle.SetActive (false);
+		} else if (selectedStar == null) {
+					globalVariables.UI.greenSelectCircle.SetActive (false);
 				}
 			}
 		} else {
 			HoverStar ();
 			//globalVariables.UI.greenSelectCircle.SetActive (false);
-		}
+		}*/
 
 
 		//Markera object
@@ -133,9 +133,10 @@ public class MouseController : MonoBehaviour{
 			foreach (Star star in hoverSector.starList) {
 				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
 					hoverStar = star;
-				} /*else {
+					break;
+				} else {
 					hoverStar = null;
-				}*/
+				}
 			}
 		} else {
 			hoverStar = null;
