@@ -76,7 +76,7 @@ public class MouseController : MonoBehaviour{
 			}
 
 			if (selectedStar != null) {
-				if (Vector3.Distance (galaxyMousePos, selectedStar.position) > gameSettings.GameSettings.StarClickBox) {
+				if (Vector3.Distance (galaxyMousePos, selectedStar.position) > gameSettings.UI.StarClickBox) {
 					selectedStar = null;
 				}
 			}
@@ -131,7 +131,7 @@ public class MouseController : MonoBehaviour{
 
 		if (hoverSector != null) {
 			foreach (Star star in hoverSector.starList) {
-				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
+				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.UI.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
 					hoverStar = star;
 					break;
 				} else {

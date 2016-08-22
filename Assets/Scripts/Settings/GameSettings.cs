@@ -26,7 +26,11 @@ namespace gameSettings{
 		public static float KeyboardScrollSpeed = 0.04f; //0.04f
 
 
+	}
+
+	public static class UI {
+
 		//UI settings
-		public static float StarClickBox = 1f; //0.5f
+		public static float StarClickBox = 2f; //0.5f
 	}
 }

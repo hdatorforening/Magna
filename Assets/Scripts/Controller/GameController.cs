@@ -75,6 +75,7 @@ public class GameController : MonoBehaviour {
 
 		star.go = new GameObject ();
 		star.go.AddComponent<StarController> ();
+		star.go.AddComponent<CircleCollider2D> ();
 
 		star.go.name = "Star_" + star.id;
 		star.go.transform.position = star.position;
