@@ -33,7 +33,7 @@ public class GameController : MonoBehaviour {
 		Setup ();
 
 		galaxy = new Galaxy (this);
-		GlobalVariables.galaxy = galaxy;
+		globalVariables.GlobalVariables.galaxy = galaxy;
 
 		player = new Agent ();
 			

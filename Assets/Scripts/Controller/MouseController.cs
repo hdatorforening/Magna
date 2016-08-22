@@ -11,7 +11,7 @@ using globalVariables;
 public class MouseController : MonoBehaviour{
 
 	bool mouseDebug = false;
-	bool firstRun = true;
+	//bool firstRun = true;
 
 	Sector hoverSector; //Sektorn musen är i.
 	Star hoverStar; //Stjärnan musen är över.
@@ -59,12 +59,13 @@ public class MouseController : MonoBehaviour{
 						text.text = hoverStar.id.ToString ();
 						//globalVariables.UI.greenSelectCircle.SetActive (true);
 					}
-				} /*else {
-					globalVariables.UI.greenSelectCircle.SetActive (false);
-				}*/
+				} else {
+					//globalVariables.UI.greenSelectCircle.SetActive (false);
+				}
 			}
 		} else {
 			HoverStar ();
+			//globalVariables.UI.greenSelectCircle.SetActive (false);
 		}
 
 
@@ -74,8 +75,10 @@ public class MouseController : MonoBehaviour{
 				selectedStar = hoverStar;
 			}
 
-			if (Vector3.Distance(galaxyMousePos, selectedStar.position) > gameSettings.GameSettings.StarClickBox) {
-				selectedStar = null;
+			if (selectedStar != null) {
+				if (Vector3.Distance (galaxyMousePos, selectedStar.position) > gameSettings.GameSettings.StarClickBox) {
+					selectedStar = null;
+				}
 			}
 
 			Interact ();
@@ -121,14 +124,18 @@ public class MouseController : MonoBehaviour{
 	}
 
 	void HoverStar(){
-		
-		hoverSector = galaxy.GetSectorFromPos (galaxyMousePos);
+
+		if (galaxy != null) {
+			hoverSector = galaxy.GetSectorFromPos (galaxyMousePos);
+		}
 
 		if (hoverSector != null) {
 			foreach (Star star in hoverSector.starList) {
 				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.GameSettings.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
 					hoverStar = star;
-				}
+				} /*else {
+					hoverStar = null;
+				}*/
 			}
 		} else {
 			hoverStar = null;
