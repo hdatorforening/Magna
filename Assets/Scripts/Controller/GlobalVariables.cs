@@ -21,10 +21,13 @@ namespace globalVariables{
 
 	public static class UI{
 
+		//Prefabs
 		public static GameObject greenSelectCircle;
+		public static GameObject systemUIBody;
 		public static GameObject ui;
 
 		public static Star hoverStar;
+		public static Star selectedStar;
 
 		static GameObject mainMenu;
 		public static GameObject MainMenu { get { return mainMenu;} set { mainMenu = value;} }

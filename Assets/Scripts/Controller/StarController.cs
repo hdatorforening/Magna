@@ -6,7 +6,7 @@ using gameSettings;
 
 public class StarController : MonoBehaviour {
 
-	Star Star;
+	public Star star;
 
 	void Start(){
 		CircleCollider2D collider = GetComponentInParent<CircleCollider2D> ();
@@ -16,13 +16,14 @@ public class StarController : MonoBehaviour {
 	void OnMouseEnter(){
 		globalVariables.UI.greenSelectCircle.transform.position = this.transform.position;
 		globalVariables.UI.greenSelectCircle.SetActive (true);
-		//globalVariables.UI.hoverStar = this.GetComponentInChildren<Star>();
+		globalVariables.UI.hoverStar = this.star;
 		//Debug.Log ("StarController.Enter");
 		//Debug.Log (globalVariables.UI.hoverStar);
 	}
 
 	void OnMouseExit(){
 		globalVariables.UI.greenSelectCircle.SetActive (false);
+		globalVariables.UI.hoverStar = null;
 		//Debug.Log ("StarController.Exit");
 	}
 

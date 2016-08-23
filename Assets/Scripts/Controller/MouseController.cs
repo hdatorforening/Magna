@@ -13,9 +13,7 @@ public class MouseController : MonoBehaviour{
 	bool mouseDebug = false;
 	//bool firstRun = true;
 
-	Sector hoverSector; //Sektorn musen är i.
 	Star hoverStar; //Stjärnan musen är över.
-	Star selectedStar = null;
 
 	Vector3 currFramePosition;
 	Vector3 tmpFramePosition; //Used for zoom to mouse.
@@ -29,14 +27,16 @@ public class MouseController : MonoBehaviour{
 
 	// Use this for initialization
 	void Start () {
+
+		galaxy = globalVariables.GlobalVariables.galaxy; 
+
 		text = globalVariables.UI.ui.transform.GetChild (0).GetChild (0).GetChild(0).GetComponent<Text>();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		Profiler.BeginSample ("MouseController:Update()");
-
-		galaxy = globalVariables.GlobalVariables.galaxy; 
 
 		currFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );
 
@@ -49,39 +49,19 @@ public class MouseController : MonoBehaviour{
 		}
 
 
-		/*if (hoverStar != null) {
-			if (Vector3.Distance (galaxyMousePos, hoverStar.position) > gameSettings.GameSettings.StarClickBox / 2) {
-				HoverStar ();
-				if (hoverStar != null) {
-					if (selectedStar == null) {
-						globalVariables.UI.greenSelectCircle.transform.position = hoverStar.position;
-
-						text.text = hoverStar.id.ToString ();
-						globalVariables.UI.greenSelectCircle.SetActive (true);
-					}
-		} else if (selectedStar == null) {
-					globalVariables.UI.greenSelectCircle.SetActive (false);
-				}
-			}
-		} else {
-			HoverStar ();
-			//globalVariables.UI.greenSelectCircle.SetActive (false);
-		}*/
 
 
 		//Markera object
 		if (Input.GetMouseButtonDown (0)){
-			if (hoverStar != null) {
-				selectedStar = hoverStar;
-			}
 
-			if (selectedStar != null) {
-				if (Vector3.Distance (galaxyMousePos, selectedStar.position) > gameSettings.UI.StarClickBox) {
-					selectedStar = null;
-				}
+			if (globalVariables.UI.hoverStar != null) {
+				globalVariables.UI.selectedStar = globalVariables.UI.hoverStar;
+			} else {
+				globalVariables.UI.selectedStar = null;
 			}
-
+			
 			Interact ();
+
 		}
 
 
@@ -121,26 +101,6 @@ public class MouseController : MonoBehaviour{
 		}
 
 		//Profiler.EndSample();
-	}
-
-	void HoverStar(){
-
-		if (galaxy != null) {
-			hoverSector = galaxy.GetSectorFromPos (galaxyMousePos);
-		}
-
-		if (hoverSector != null) {
-			foreach (Star star in hoverSector.starList) {
-				if (Vector3.Distance (galaxyMousePos, star.position) < gameSettings.UI.StarClickBox) { //TODO StarClickBox < StarDistance / 2.
-					hoverStar = star;
-					break;
-				} else {
-					hoverStar = null;
-				}
-			}
-		} else {
-			hoverStar = null;
-		}
 	}
 
 }

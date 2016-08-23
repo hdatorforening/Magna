@@ -8,6 +8,7 @@ public class Star {
 
 	public bool starwayGen = false;
 	public List<Star> connectedStars = new List<Star>(); //Alla stjärnor som denna stjärna har anslutning till.
+	public List<Body> bodyList = new List<Body>();
 
 	Sector sector; //TODO - Används inte, kanske bör tas bort.
 
@@ -23,6 +24,11 @@ public class Star {
 		this.sector = sector;
 		this.starPosition = position;
 		this.starID = sector.Galaxy.GetNewStarID();
+
+		for (int i = 0; i < Random.value * 3; i++) {
+			bodyList.Add (new Body ());
+		}
+
 	}
 
 }

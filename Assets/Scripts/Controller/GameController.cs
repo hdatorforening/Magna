@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour {
 	//Prefabs
 	public GameObject mainMenuPrefab;
 	public GameObject greenSelectCirlce;
+	public GameObject systemUIBodyPrefab;
 
 	//Sprites
 	public Sprite starSprite;
@@ -33,7 +34,7 @@ public class GameController : MonoBehaviour {
 	//public Galaxy Galaxy { get { return galaxy;} }
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		Setup ();
 
 		galaxy = new Galaxy (this);
@@ -68,6 +69,7 @@ public class GameController : MonoBehaviour {
 		//Setup the basic prefabs
 		globalVariables.UI.greenSelectCircle = (GameObject)Instantiate(greenSelectCirlce, new Vector3(0, 0, 0), Quaternion.identity);
 		globalVariables.UI.greenSelectCircle.transform.SetParent (dummyUI.transform);
+		globalVariables.UI.systemUIBody = systemUIBodyPrefab;
 	}
 
 	public void DrawStar(Star star){
@@ -79,6 +81,8 @@ public class GameController : MonoBehaviour {
 
 		star.go.name = "Star_" + star.id;
 		star.go.transform.position = star.position;
+
+		star.go.GetComponent<StarController> ().star = star;
 
 		star.go.transform.localScale = new Vector3 (
 			GameSettings.starSize, 
