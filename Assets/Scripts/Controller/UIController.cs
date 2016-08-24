@@ -68,6 +68,8 @@ public class UIController : MonoBehaviour {
 		body_go.name = "Body";
 		body_go.SetActive (false);
 		body_go.layer = 5;
+		//body_go.GetComponents<SpriteRenderer>().
+		//body_go.transform.GetChild(0).transform = body_go.transform.localScale;
 
 		uiBodyList.Add (body_go);
 

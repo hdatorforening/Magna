@@ -65,6 +65,7 @@ public class GameController : MonoBehaviour {
 		globalVariables.UI.MainMenu = Instantiate (mainMenuPrefab);
 		globalVariables.UI.MainMenu.SetActive (false);
 		globalVariables.UI.MainMenu.transform.SetParent (dummyUI.transform);
+		//globalVariables.UI.MainMenu.transform.GetChild(0)
 
 		//Setup the basic prefabs
 		globalVariables.UI.greenSelectCircle = (GameObject)Instantiate(greenSelectCirlce, new Vector3(0, 0, 0), Quaternion.identity);
