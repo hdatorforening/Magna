@@ -61,15 +61,18 @@ public class UIController : MonoBehaviour {
 	void PrepareUiBody() {
 		Profiler.BeginSample ("PrepareUiBody()");
 
-		GameObject body_go = (GameObject)Instantiate(globalVariables.UI.systemUIBody, new Vector3(0,0,0), Quaternion.identity );
+		GameObject body_go = (GameObject)Instantiate(globalVariables.UI.systemUIBody);
 
-		body_go.transform.SetParent (globalVariables.UI.ui.transform.GetChild (0).GetChild (0).GetChild (1));
+		body_go.transform.SetParent (globalVariables.UI.ui.transform.GetChild (0).GetChild (0).GetChild (1), false);
 		body_go.transform.localScale = new Vector3(1,1,1);
 		body_go.name = "Body";
 		body_go.SetActive (false);
 		body_go.layer = 5;
 		//body_go.GetComponents<SpriteRenderer>().
 		//body_go.transform.GetChild(0).transform = body_go.transform.localScale;
+		//body_go.AddComponent<TextMesh> ().text = "Heil Hitler!";
+		//body_go.GetComponent<TextMesh> ().fontSize = 300;
+		//body_go.GetComponent<TextMesh> ().alignment
 
 		uiBodyList.Add (body_go);
 
