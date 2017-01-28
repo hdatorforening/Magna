@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/GalaxyView.unity
+  isLoaded: 1
+  isActive: 1
