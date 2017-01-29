@@ -77,6 +77,11 @@ public class MouseController : MonoBehaviour{
 
 	void Zoom(){
 		GameSettings.cameraSizeGalaxy -= Input.GetAxis ("Mouse ScrollWheel") * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
+
+		if (GameSettings.cameraSizeGalaxy < GameSettings.cameraMaxZoomIn) {
+			GameSettings.cameraSizeGalaxy = 1f;
+		}
+
 		Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
 
 		tmpFramePosition = Camera.main.ScreenToWorldPoint ( Input.mousePosition );

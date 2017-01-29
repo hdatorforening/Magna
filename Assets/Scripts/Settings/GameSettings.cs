@@ -19,6 +19,7 @@ namespace gameSettings{
 
 		//Camera Settings
 		public static float cameraSizeGalaxy = 20f;
+		public static float cameraMaxZoomIn = 1f; //1f, A value less than 1 may break the UI
 
 		public static float scrollSpeed = 1f; //1f
 		public static float scrollToMouseSpeed = 5f; //5f
