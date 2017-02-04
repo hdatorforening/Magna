@@ -31,11 +31,13 @@ public class UIController : MonoBehaviour {
 		if (selectedStar != globalVariables.UI.selectedStar) {
 			Debug.Log ("UIControl.Update");
 
-			for (int i = 0; i < bodyListCount; i++){
-				uiBodyList [i].SetActive (false);
-			}
+			//for (int i = 0; i < bodyListCount; i++){
+			//	uiBodyList [i].SetActive (false);
+			//}
 
 			selectedStar = globalVariables.UI.selectedStar;
+
+			//Debug.Log (selectedStar.bodyList.Count);
 
 			//this.UIsystem.GetComponent<GUIText> ().text = "" + selectedStar.id;
 			if (selectedStar != null) {
@@ -66,7 +68,7 @@ public class UIController : MonoBehaviour {
 		body_go.transform.SetParent (globalVariables.UI.ui.transform.GetChild (0).GetChild (0).GetChild (1), false);
 		body_go.transform.localScale = new Vector3(1,1,1);
 		body_go.name = "Body";
-		body_go.SetActive (false);
+		body_go.SetActive (true);
 		body_go.layer = 5;
 		//body_go.GetComponents<SpriteRenderer>().
 		//body_go.transform.GetChild(0).transform = body_go.transform.localScale;

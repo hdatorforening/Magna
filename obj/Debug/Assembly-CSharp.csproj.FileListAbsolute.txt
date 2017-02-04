@@ -21,3 +21,26 @@ D:\Unity Games\Magna\Temp\bin\Debug\UnityEngine.Analytics.xml
 D:\Unity Games\Magna\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 D:\Unity Games\Magna\obj\Debug\Assembly-CSharp.dll
 D:\Unity Games\Magna\obj\Debug\Assembly-CSharp.pdb
+C:\UnityGames\Magna\Temp\bin\Debug\Assembly-CSharp.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Assembly-CSharp.pdb
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEditor.dll
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.Analytics.dll
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.dll
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.Networking.dll
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.UI.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Mono.Cecil.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Unity.SerializationLogic.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Unity.DataContract.dll
+C:\UnityGames\Magna\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Unity.UNetWeaver.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Unity.CecilTools.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Mono.Cecil.Pdb.dll
+C:\UnityGames\Magna\Temp\bin\Debug\Mono.Cecil.Mdb.dll
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.xml
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEditor.xml
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.UI.xml
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.Networking.xml
+C:\UnityGames\Magna\Temp\bin\Debug\UnityEngine.Analytics.xml
+C:\UnityGames\Magna\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
+C:\UnityGames\Magna\obj\Debug\Assembly-CSharp.dll
+C:\UnityGames\Magna\obj\Debug\Assembly-CSharp.pdb

@@ -33,6 +33,7 @@ public class KeyboardController : MonoBehaviour{
 					new Vector3(-1, 0, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
 			}
 
+
 			//Camera control - Alternative --------------------------------------------------------------------
 			if (Input.GetKey(keyLayout.KeyLayout.cameraMoveUp2)){
 				Camera.main.transform.Translate ( 
@@ -52,6 +53,24 @@ public class KeyboardController : MonoBehaviour{
 			if (Input.GetKey(keyLayout.KeyLayout.cameraMoveLeft2)){
 				Camera.main.transform.Translate ( 
 					new Vector3(-1, 0, 0) * GameSettings.KeyboardScrollSpeed * GameSettings.cameraSizeGalaxy );
+			}
+
+
+			//Camera Zoom
+			if (Input.GetKey(keyLayout.KeyLayout.cameraZoomIn) || Input.GetKey(keyLayout.KeyLayout.cameraZoomIn2)){
+				GameSettings.cameraSizeGalaxy -= 0.1f * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
+				if (GameSettings.cameraSizeGalaxy < GameSettings.cameraMaxZoomIn) {
+					GameSettings.cameraSizeGalaxy = 1f;
+				}
+				Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
+			}
+
+			if (Input.GetKey(keyLayout.KeyLayout.cameraZoomOut) || Input.GetKey(keyLayout.KeyLayout.cameraZoomOut2)){
+				GameSettings.cameraSizeGalaxy -= -0.1f * GameSettings.scrollSpeed * GameSettings.cameraSizeGalaxy;
+				if (GameSettings.cameraSizeGalaxy < GameSettings.cameraMaxZoomIn) {
+					GameSettings.cameraSizeGalaxy = 1f;
+				}
+				Camera.main.orthographicSize = GameSettings.cameraSizeGalaxy;
 			}
 
 

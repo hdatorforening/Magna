@@ -15,6 +15,11 @@ namespace keyLayout{
 		public static string cameraMoveRight2 = "right"; //right
 		public static string cameraMoveLeft2 = "left"; //left
 
+		public static string cameraZoomIn = "q"; //Plus
+		public static string cameraZoomOut = "e"; //Minus
+
+		public static string cameraZoomIn2 = "[+]"; //Plus
+		public static string cameraZoomOut2 = "[-]"; //Minus
 
 		//Interface
 		public static string exit = "escape"; //escape
